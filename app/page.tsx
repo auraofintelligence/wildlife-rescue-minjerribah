@@ -112,6 +112,31 @@ Case: ${record.id}
 [WRM-DATA]${encodeCaseData(record)}[/WRM-DATA]`;
 }
 
+function copyTextWithFallback(text: string) {
+  if (typeof document === "undefined") return false;
+
+  const textArea = document.createElement("textarea");
+  textArea.value = text;
+  textArea.setAttribute("readonly", "");
+  textArea.style.position = "fixed";
+  textArea.style.top = "0";
+  textArea.style.left = "0";
+  textArea.style.opacity = "0";
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
+
+  let copied = false;
+  try {
+    copied = document.execCommand("copy");
+  } catch {
+    copied = false;
+  }
+
+  document.body.removeChild(textArea);
+  return copied;
+}
+
 const snakeIdentities: SnakeIdentity[] = [
   {
     id: "unknown",
@@ -875,6 +900,8 @@ function TriageFlow({
   const [place, setPlace] = useState("");
   const [useLocation, setUseLocation] = useState(Boolean(livePosition));
   const [savedCase, setSavedCase] = useState<CaseRecord | null>(null);
+  const [copyMessage, setCopyMessage] = useState("");
+  const [showAlertText, setShowAlertText] = useState(false);
 
   function chooseAnimal(selected: Animal) {
     setAnimal(selected);
@@ -911,11 +938,35 @@ function TriageFlow({
     };
     onSave(record);
     setSavedCase(record);
+    setCopyMessage("");
+    setShowAlertText(false);
     setStep("saved");
   }
 
   async function copyAlert() {
     if (!savedCase) return;
+    const alertText = formatCaseAlert(savedCase);
+
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(alertText);
+        setCopyMessage("Copied. Paste it into SMS, WhatsApp or the rescue chat.");
+        setShowAlertText(false);
+        return;
+      }
+    } catch {
+      // iPhone in-app browsers can block clipboard writes even from a tap.
+    }
+
+    const copiedByFallback = copyTextWithFallback(alertText);
+    setCopyMessage(
+      copiedByFallback
+        ? "Copied. Paste it into SMS, WhatsApp or the rescue chat."
+        : "Could not auto-copy here. Press and hold the alert text below, then copy.",
+    );
+    setShowAlertText(true);
+    return;
+
     const location =
       savedCase.latitude !== undefined
         ? `${savedCase.latitude.toFixed(5)}, ${savedCase.longitude?.toFixed(5)}`
@@ -1139,6 +1190,17 @@ Case: ${savedCase.id}
                   <Clipboard size={20} />
                   Copy responder alert
                 </button>
+                {copyMessage && <p className="copy-feedback">{copyMessage}</p>}
+                {showAlertText && (
+                  <label className="copy-fallback">
+                    <span>Responder alert text</span>
+                    <textarea
+                      readOnly
+                      value={formatCaseAlert(savedCase)}
+                      onFocus={(event) => event.target.select()}
+                    />
+                  </label>
+                )}
                 <button className="continue-button" onClick={onClose}>Back to the map</button>
               </motion.div>
             )}

@@ -1210,6 +1210,47 @@ h2 {
   margin-top: 7px;
 }
 
+.copy-feedback {
+  width: 100%;
+  margin: 9px 0 0;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #edf3f0;
+  color: var(--forest);
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.copy-fallback {
+  width: 100%;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  text-align: left;
+}
+
+.copy-fallback span {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.copy-fallback textarea {
+  min-height: 142px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #f8f7f1;
+  color: var(--ink);
+  padding: 12px;
+  font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
 .draft-strip {
   padding: 0 13px;
   background: #f0eee7;

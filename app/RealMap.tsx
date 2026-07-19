@@ -28,7 +28,7 @@ const ISLAND_BOUNDS: [[number, number], [number, number]] = [
   [153.57, -27.3],
 ];
 
-const INITIAL_CENTRE: [number, number] = [153.45, -27.53];
+const INITIAL_CENTRE: [number, number] = [153.47, -27.46];
 const INITIAL_ZOOM = 10.55;
 
 const QUEENSLAND_IMAGERY =

@@ -51,6 +51,10 @@ test("keeps offline, GPS, real-map and safety features in the product source", a
   assert.match(page, /enableHighAccuracy:\s*true/);
   assert.match(page, /localStorage\.setItem\("wrm-cases"/);
   assert.match(page, /function formatCaseAlert/);
+  assert.match(page, /function copyTextWithFallback/);
+  assert.match(page, /Copied\. Paste it into SMS, WhatsApp or the rescue chat\./);
+  assert.match(page, /Could not auto-copy here/);
+  assert.match(page, /Responder alert text/);
   assert.match(page, /\[WRM-DATA\]/);
   assert.match(page, /function extractCaseFromAlert/);
   assert.match(page, /Import case to this phone/);
@@ -87,6 +91,7 @@ test("keeps offline, GPS, real-map and safety features in the product source", a
   assert.match(realMap, /Cases/);
   assert.match(realMap, /maxBounds:\s*ISLAND_BOUNDS/);
   assert.match(realMap, /INITIAL_ZOOM\s*=\s*10\.55/);
+  assert.match(realMap, /INITIAL_CENTRE:\s*\[number,\s*number\]\s*=\s*\[153\.47,\s*-27\.46\]/);
   assert.match(realMap, /minZoom:\s*INITIAL_ZOOM/);
   assert.match(realMap, /zoom:\s*Math\.max\(map\.getZoom\(\),\s*14\)/);
   assert.match(realMap, /isOnMinjerribah/);
