@@ -29,8 +29,8 @@ const ISLAND_BOUNDS: [[number, number], [number, number]] = [
 ];
 
 const INITIAL_VIEW_BOUNDS: [[number, number], [number, number]] = [
-  [153.34, -27.58],
-  [153.57, -27.4],
+  [153.34, -27.55],
+  [153.57, -27.37],
 ];
 const INITIAL_CENTRE: [number, number] = [153.46, -27.48];
 const INITIAL_ZOOM = 10.55;
