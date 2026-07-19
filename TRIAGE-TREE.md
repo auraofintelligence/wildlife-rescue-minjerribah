@@ -1,5 +1,9 @@
 # The triage tree
 
+**EARLIER DESIGN DRAFT.** The current region-focused review copy is
+`MINJERRIBAH-TRIAGE-REVIEW.txt`. It is deliberately plain text so Wildlife Rescue Minjerribah
+can correct, delete and add branches without touching app code.
+
 **DRAFT for Wildlife Rescue Minjerribah to mark up.** Nothing here is final until the team's
 trained, licensed people have signed it off. The app shows this content to the public, so every
 word below should be treated the way a 000 script is treated: reviewed, agreed, owned by the
@@ -17,6 +21,9 @@ people with the training.
    watch, keep back (people, dogs, cats, drones), call, stay, mark the spot, photograph from a
    distance, turn lights off, keep pets inside. The only hands-on instructions allowed concern
    the person's own safety (hazard lights, washing a wound).
+   **Any injured, trapped or distressed animal may defend itself.** This warning is shown
+   before species selection as well as on each relevant path. Familiar or non-venomous does
+   not mean safe to handle.
 5. **Call is always on screen.** Every screen carries the Wildlife Rescue Minjerribah call
    button, 0448 466 556. The questions serve the call; they never gate it.
 6. **The path fills in the report.** By the time an action card is reached, animal, situation,
@@ -34,13 +41,14 @@ people with the training.
 
 ## The animal tiles
 
-Fifteen tiles, one tap each. Kangaroo and wallaby are separate (size changes the danger and the
-handling crew). Snakes get their own identification step. Goannas and blue-tongues get their own
-tile so they stop being reported as snakes.
+Eighteen tiles, one tap each. Kangaroo and wallaby are separate (size changes the danger and the
+handling crew). Snakes get their own identification step. Goannas and blue-tongues are separate
+because their risk is different. Pelicans are separated from smaller seabirds, and sharks and
+rays have a marine path.
 
-Koala · Kangaroo · Wallaby · Echidna · Possum or glider · Snake · Goanna or blue-tongue ·
-Sea turtle · Dolphin, whale or dugong · Seabird or shorebird · Land bird · Bird of prey ·
-Flying-fox or bat · Other · Not sure
+Koala · Kangaroo · Wallaby · Echidna · Possum or glider · Snake · Goanna · Blue-tongue ·
+Sea turtle · Dolphin, whale or dugong · Shark or ray · Pelican or large waterbird · Other
+seabird or shorebird · Land bird · Bird of prey · Flying-fox or bat · Other · Not sure
 
 ## The paths
 
@@ -124,10 +132,19 @@ it's injured
 Every snake action card begins: **Possible bite? Call 000 immediately. Keep the person still.
 Do not wash the bite or try to catch the snake.**
 
-### Goanna or blue-tongue
+### Goanna
 What's happening? → hurt / stuck or trapped / just visiting
-- Hurt or trapped → **NOW.** Keep dogs in, keep back, call.
-- Visiting → **LOG IT.** They're locals. Keep dogs inside until it moves on.
+- Hurt or trapped → **NOW, DANGER.** A goanna has powerful claws, teeth and tail and may cause
+  serious injury when hurt or cornered. Keep people, faces, hands and dogs well away. Do not
+  block its escape, restrain it or pull at anything trapping it. Call.
+- Visiting → **LOG IT.** Bring dogs inside and leave a clear escape route. Do not chase or
+  corner it.
+
+### Blue-tongue lizard
+What's happening? → hurt / stuck or trapped / just visiting
+- Hurt or trapped → **NOW.** Blue-tongues are not venomous, but a distressed animal may bite.
+  Keep pets away, don't pick it up or box it, and call.
+- Visiting → **LOG IT.** Bring pets in and let it move on. Do not relocate it.
 
 ### Sea turtle
 What's happening? → washed up or stranded / tangled in line or net / hatchlings out /
@@ -144,9 +161,28 @@ Any answer (stranded / tangled / distressed in shallows / dead) → **NOW.** Do:
 they're powerful even beached; keep dogs and drones away; note landmarks. Don't: push it back
 out, hold it upright. Call the team plus the stranding hotline.
 
-### Seabird or shorebird
+### Shark or ray
+What is happening? → stranded or washed up / tangled or hooked / distressed in shallow water /
+healthy sighting
+- Any distressed answer → **NOW, DANGER.** Get people and dogs away. Call Wildlife Rescue
+  Minjerribah with the exact beach position, tide line and visible gear. Don't enter the water,
+  touch, drag, restrain or push the animal back. Keep clear of its head, mouth and tail.
+- Healthy sighting → **KEEP WATCH FROM LAND.** Leave the water, alert nearby water users or
+  lifesavers, and note direction. Do not follow it.
+
+### Pelican or large waterbird
+Pelicans are waterbirds, not birds of prey. Their beaks and powerful wings can injure a person's
+face or eyes when the bird is distressed.
+
+What's happening? → hooked or tangled / can't fly or visibly hurt / oiled or sick / healthy
+- Hooked, hurt, oiled or sick → **NOW.** Keep a clear circle around it and call. Don't grab its
+  beak, wings or neck; don't cut trailing line, pull a hook, cover it or throw it into the air.
+- Healthy → **LOG IT.** Keep dogs away and don't feed or crowd it.
+
+### Other seabird or shorebird
 What's happening? → hooked or tangled in fishing line / can't fly / oiled or sick / chick alone
 
+Any distressed bird may peck, scratch, flap or strike at eyes, so faces and hands stay away.
 Most bird calls on the island are fishing gear, so it leads.
 - Hooked or tangled → is it stuck where it is? → stuck / loose and trailing line
   - Stuck (tethered to jetty, snag or rocks) → **NOW.** Do: keep people back so it doesn't
@@ -161,6 +197,7 @@ Most bird calls on the island are fishing gear, so it leads.
 ### Land bird
 What's happening? → hit a window or car / caught by a cat or dog / baby bird on the ground /
 tangled or hooked
+- Any distressed bird may peck, scratch or strike at eyes. The public is not asked to handle it.
 - Window or car → **SOON.** Stunned birds often recover. Watch from inside, keep pets in, call
   if it hasn't moved on within the hour or looks hurt.
 - Cat or dog → **NOW.** Always urgent even if it looks fine. Keep the pet inside, call.

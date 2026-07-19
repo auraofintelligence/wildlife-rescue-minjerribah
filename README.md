@@ -5,8 +5,10 @@ Minjerribah (North Stradbroke Island).
 
 ## What this first version proves
 
-- A geographically accurate Minjerribah vector map with a voluntary live GPS toggle.
-- Safety-first draft triage across fifteen animal groups.
+- A geographically accurate, island-locked Minjerribah field map with an official Queensland
+  aerial view, optional roads, labels and case layers, plus a voluntary live GPS toggle.
+- Safety-first draft triage across the island's major wildlife groups, including separate
+  paths for goannas, blue-tongues, sharks, pelicans and snake identification.
 - Accurate incident location using GPS, landmarks and field prompts.
 - Cases saved locally on the phone without an account or server.
 - Human-readable responder alerts containing a compact importable data packet.
@@ -15,8 +17,9 @@ Minjerribah (North Stradbroke Island).
 ## Safety status
 
 The triage wording is a **working draft**, not approved operational advice.
-`TRIAGE-TREE.md` is the review document for Wildlife Rescue Minjerribah's trained and
-licensed people. Contact details and every decision path must be verified before public use.
+`MINJERRIBAH-TRIAGE-REVIEW.txt` is the current plain-text review document for Wildlife Rescue
+Minjerribah's trained and licensed people. Contact details and every decision path must be
+verified before public use. `TRIAGE-TREE.md` is retained as the earlier design draft.
 
 ## Run it locally on Windows
 
@@ -40,6 +43,7 @@ will clear those cases.
 
 ## Map data
 
-The bundled map is a Minjerribah extract of the 19 July 2026 Protomaps basemap,
-derived from OpenStreetMap and Natural Earth data. It is rendered by MapLibre and
-PMTiles. OpenStreetMap attribution remains visible on the map.
+The bundled offline map is a Minjerribah extract of the 19 July 2026 Protomaps basemap,
+derived from OpenStreetMap and Natural Earth data. It is rendered by MapLibre and PMTiles.
+The optional online aerial view uses the Queensland Government's Latest State Program public
+imagery service. Source attribution remains visible in both views.

@@ -1,0 +1,757 @@
+WILDLIFE RESCUE MINJERRIBAH
+PUBLIC REPORTER TRIAGE TREE - REGIONAL REVIEW COPY
+Draft: 19 July 2026
+
+STATUS
+======
+
+This is a working text map, not approved wildlife or medical advice.
+Wildlife Rescue Minjerribah's trained and licensed people must verify it before public use.
+
+The point of this file is to be easy to mark up in an email, group chat or meeting.
+Reviewers can put one of these labels beside any line:
+
+  [KEEP]    correct for Minjerribah
+  [CHANGE]  replace the words, urgency or action
+  [DELETE]  this branch should not exist
+  [ADD]     a missing animal, situation or question
+  [WRM VERIFY] requires local operational knowledge
+
+Most important review questions:
+
+  1. Which species and situations actually produce calls on Minjerribah?
+  2. Which calls need an immediate responder, a specialist, advice only, or a log only?
+  3. Which words keep the caller calm and stop unsafe public rescue attempts?
+  4. Which details save the responder from making a second phone call?
+  5. Which phone numbers may be shown publicly, and at what times?
+
+
+THE WHOLE PUBLIC FLOW
+=====================
+
+START
+  |
+  +-- Is a person in immediate danger or seriously injured?
+  |     |
+  |     +-- YES -> Call 000 now.
+  |     |          Move away only if it is safe.
+  |     |          Follow the call-taker's instructions.
+  |     |          Wildlife reporting must not delay emergency help.
+  |     |
+  |     +-- NO  -> Continue.
+  |
+  +-- Can the animal be observed without moving closer?
+  |     |
+  |     +-- NO / NOT SURE -> Stay back. Do not identify it.
+  |     |                   Select NOT SURE and use the safest route.
+  |     |
+  |     +-- YES -> Select the closest animal group.
+  |
+  +-- UNIVERSAL SAFETY GATE
+  |     |
+  |     +-- Injured, trapped, distressed, cornered or being contained?
+  |           |
+  |           +-- YES -> Assume it may defend itself.
+  |                      Keep face, eyes, hands, children and pets away.
+  |                      Do not touch, feed, cover, box, restrain or rescue it.
+  |                      Watch from a safe position and call.
+  |
+  +-- Choose animal group.
+  |
+  +-- Answer one situation question.
+  |
+  +-- Show the action card and call button immediately.
+  |
+  +-- Collect only safe, useful details.
+  |
+  +-- Save locally and create a copyable SMS/MMS handoff.
+
+
+CONTACT ROUTING TO VERIFY
+=========================
+
+Wildlife Rescue Minjerribah
+  Draft number: 0448 466 556
+  [WRM VERIFY number, public availability, hours and voicemail wording]
+
+Triple Zero
+  Number: 000
+  Use: a person in immediate danger; suspected snake bite; life-threatening injury.
+
+Queensland marine animal stranding hotline
+  Number: 1300 130 372, option 1
+  Published scope: sick, injured or dead turtles, dolphins, dugongs, seals and whales.
+  [WRM VERIFY whether the local team wants this shown before or after its own number]
+  [WRM VERIFY the correct official route for stranded sharks and rays]
+
+RSPCA Queensland
+  Number: 1300 ANIMAL / 1300 264 625
+  Published scope: sick, injured or orphaned non-marine wildlife.
+  [WRM VERIFY whether this is a public backup, an after-hours route, or omitted]
+
+Specialists reached through the local team
+  Licensed snake catcher
+  Vaccinated and trained bat handler
+  Koala responder
+  Raptor responder
+  Marine stranding responder
+  Large macropod responder
+  [WRM ADD the actual specialist routing rules; private numbers need not be published]
+
+
+ANIMAL CHOICE SCREEN
+====================
+
+  Koala
+  Kangaroo
+  Wallaby
+  Echidna
+  Possum or glider
+  Snake
+  Goanna
+  Blue-tongue lizard
+  Sea turtle
+  Dolphin, whale or dugong
+  Shark or ray
+  Pelican or large waterbird
+  Other seabird or shorebird
+  Land bird
+  Bird of prey
+  Flying-fox or bat
+  Other animal
+  Not sure
+
+[WRM ADD missing local animals and local names]
+[WRM CHANGE groups that would send the wrong responder or ask the wrong safety question]
+
+
+1. KOALA
+========
+
+Hazard shown before choices:
+  A frightened, injured or cornered koala can scratch with powerful claws.
+  Keep people and dogs well back. Do not stand between it and a tree.
+  [WRM VERIFY preferred local wording]
+
+What is the koala doing?
+  |
+  +-- On the ground
+  |     -> CALL NOW
+  |     -> Bring dogs and people inside or well away.
+  |     -> Keep the exact tree or spot in view.
+  |     -> Do not pick it up, crowd it or block its escape.
+  |
+  +-- Hit or visibly injured
+  |     -> CALL NOW
+  |     -> Stay out of traffic; use hazard lights only from a safe position.
+  |     -> Note where it is and which way it moves.
+  |     -> Do not chase or handle it.
+  |
+  +-- In a yard with dogs
+  |     -> CALL NOW
+  |     -> Bring every dog inside.
+  |     -> Watch from inside if possible.
+  |     -> Leave the koala a clear route to a tree.
+  |
+  +-- In a tree and looks well
+        -> LOG / WATCH
+        -> Photograph only from the existing safe distance.
+        -> Note the tree, time and behaviour.
+
+[WRM VERIFY whether every ground koala is an immediate call]
+
+
+2. KANGAROO
+============
+
+Hazard shown before choices:
+  Kangaroos are large, powerful wild animals. An injured or cornered kangaroo can kick,
+  scratch and cause severe or fatal injury. Do not approach, chase or corner it.
+
+Which best describes the kangaroo?
+  |
+  +-- Alive and cannot get up
+  |     -> CALL NOW
+  |     -> Keep people and dogs well away.
+  |     -> Keep its location in view from safety.
+  |     -> Do not check the pouch or attempt to move it.
+  |
+  +-- Moving but hurt
+  |     -> CALL NOW - MOBILE CASE
+  |     -> Note direction, speed, visible injuries and each changed location.
+  |     -> Do not follow closely or chase it.
+  |
+  +-- Dead or not moving
+  |     -> CALL NOW - POSSIBLE POUCH YOUNG
+  |     -> Mark the exact location and stay safely clear of traffic.
+  |     -> Do not approach to confirm death, check the pouch or move the animal.
+  |
+  +-- Acting aggressively or blocking a safe exit
+  |     -> HUMAN SAFETY FIRST
+  |     -> Increase distance slowly and put a solid barrier between people and the animal.
+  |     -> Do not run at it, turn the encounter into a rescue, or strike it.
+  |     -> Call 000 if a person is in immediate danger.
+  |     -> [WRM VERIFY local dangerous-animal routing]
+  |
+  +-- Looks healthy
+        -> LOG / WATCH
+        -> Give it space. Do not approach or feed it.
+
+
+3. WALLABY
+==========
+
+Hazard shown before choices:
+  An injured or cornered wallaby may kick, scratch or bite. Leave a clear escape route.
+
+Use the same choices as KANGAROO:
+  cannot get up / moving but hurt / dead or not moving / threatening / looks healthy
+
+[WRM VERIFY whether wallaby urgency, pouch checks or responder routing differ from kangaroo]
+
+
+4. ECHIDNA
+==========
+
+What is happening?
+  |
+  +-- Hurt or on a road
+  |     -> CALL NOW
+  |     -> Keep dogs away and record the original location.
+  |     -> Do not enter traffic, move it or place anything over it.
+  |
+  +-- Dug itself in
+  |     -> CALL FOR ADVICE
+  |     -> Give it quiet space.
+  |     -> Do not dig it out or pull at its legs.
+  |
+  +-- Wandering and looks well
+        -> LOG / WATCH
+        -> Keep dogs away and let it continue.
+        -> Do not relocate it.
+
+
+5. POSSUM OR GLIDER
+===================
+
+What have you noticed?
+  |
+  +-- On the ground or out in daylight
+  |     -> CALL NOW
+  |     -> Keep pets in. Note whether it can climb or move.
+  |     -> Do not touch, box or feed it.
+  |
+  +-- Caught by a cat or dog
+  |     -> CALL NOW even if it looks unhurt
+  |     -> Secure the pet and keep the animal in sight from a distance.
+  |     -> Do not handle it.
+  |
+  +-- Baby alone
+  |     -> CALL NOW
+  |     -> Watch quietly from indoors if possible and note whether an adult returns.
+  |     -> Do not touch or move it.
+  |
+  +-- Healthy at night
+        -> LOG / WATCH
+        -> Give it space and keep pets inside.
+
+
+6. SNAKE
+========
+
+FIRST SAFETY GATE
+  |
+  +-- Could anyone have been bitten?
+        -> Call 000 immediately.
+        -> Keep the person still.
+        -> Do not wash the bite or try to catch or kill the snake.
+        -> Follow the 000 call-taker's first-aid directions.
+
+Possible identification - only from where the reporter already stands:
+  |
+  +-- Not sure / cannot see safely
+  |     -> Record POSSIBLE ID: UNKNOWN
+  |     -> Treat as dangerous.
+  |
+  +-- Sea snake
+  |     Clues: in sea, surf or washed ashore; often a flattened paddle-like tail.
+  |     -> Treat as highly venomous.
+  |     -> Never touch it, return it to water or assume it is dead.
+  |
+  +-- Eastern brown or brown-looking snake
+  |     Clues: often slender; colour may be brown, orange, grey or almost black.
+  |     -> Treat as highly venomous.
+  |     -> Colour cannot confirm identification.
+  |
+  +-- Red-bellied black or similar black snake
+  |     Clues: glossy black; red or pink may show on lower sides; often near water.
+  |     -> Treat as highly venomous.
+  |     -> Other dangerous snakes can look similar.
+  |
+  +-- Carpet python
+  |     Clues: usually heavy-bodied with repeated cream and dark blotches.
+  |     -> Possible non-venomous match, never a safety clearance.
+  |     -> Keep back and use a trained catcher.
+  |
+  +-- Common or green tree snake
+  |     Clues: very slender and agile, long whip-like tail; colour varies widely.
+  |     -> Possible non-venomous match, never a safety clearance.
+  |     -> Keep back and use a trained catcher.
+  |
+  +-- Other / does not match
+        -> Treat as dangerous.
+
+[WRM VERIFY the snake list actually encountered on Minjerribah]
+[WRM ADD photographs only after the team has approved rights, captions and look-alike warnings]
+
+Where is the snake?
+  |
+  +-- Inside a building
+  |     -> DANGER / CALL NOW
+  |     -> Leave the room if safe, close the internal door, move people and pets away.
+  |     -> Watch likely exits from a secure distance.
+  |     -> Do not trap, follow, touch or photograph it up close.
+  |
+  +-- Yard, campsite or public space
+  |     -> CALL NOW
+  |     -> Bring children and pets inside and warn others from a distance.
+  |     -> Do not catch, move or block it.
+  |
+  +-- Road or bush
+  |     -> GIVE IT A WIDE PATH
+  |     -> Let it move away. Call if injured or unable to leave.
+  |
+  +-- Beach, rocks or water
+  |     -> CALL NOW
+  |     -> Keep people, children and dogs away from the waterline.
+  |     -> Note water / surf / high-tide-line position.
+  |     -> Do not touch it, return it to water or stand between it and open water.
+  |
+  +-- Injured or trapped
+        -> CALL NOW
+        -> Keep everyone back regardless of the possible species.
+        -> Do not attempt a rescue.
+
+
+7. GOANNA
+=========
+
+Hazard shown before choices:
+  Goannas have powerful claws, teeth and tails. A hurt, trapped or cornered goanna can
+  cause serious injury. Keep hands and face well clear.
+
+What is the goanna doing?
+  |
+  +-- Hurt
+  |     -> CALL NOW
+  |     -> Secure dogs and move people well away.
+  |     -> Note exact location and movement.
+  |     -> Do not corner, handle or block its escape.
+  |
+  +-- Stuck or trapped
+  |     -> CALL NOW
+  |     -> Keep the area quiet and photograph the trap from a distance.
+  |     -> Do not restrain it, pull it or cut material unless a responder directs you.
+  |
+  +-- Just visiting
+        -> LOG / WATCH
+        -> Bring dogs inside and leave an open escape route.
+        -> Do not feed, chase or corner it.
+
+[WRM VERIFY whether goanna species or size changes the route]
+
+
+8. BLUE-TONGUE LIZARD
+=====================
+
+Hazard shown before choices:
+  Blue-tongues are not venomous. They are lower-risk than goannas, but a distressed wild
+  animal may still bite. Do not pick it up.
+
+What is the blue-tongue doing?
+  |
+  +-- Hurt
+  |     -> CALL NOW
+  |     -> Keep pets away and note the exact location.
+  |     -> Do not pick it up, feed it or put it in a box.
+  |
+  +-- Stuck or trapped
+  |     -> CALL NOW
+  |     -> Photograph what has trapped it from a distance.
+  |     -> Do not pull, cut or handle it unless a responder directs you.
+  |
+  +-- Just visiting
+        -> LOG / WATCH
+        -> Bring pets in, leave an escape route and let it move on.
+        -> Do not relocate it.
+
+
+9. SEA TURTLE
+=============
+
+What is happening?
+  |
+  +-- Washed up or stranded
+  |     -> CALL NOW: local team plus marine stranding hotline
+  |     -> Keep crowds, dogs and drones well back.
+  |     -> Record landmarks, tide and exact beach position.
+  |     -> Do not push it into water or pour anything on it.
+  |
+  +-- Tangled in line or net
+  |     -> CALL NOW
+  |     -> Photograph the entanglement from a safe distance.
+  |     -> Do not cut, pull or remove hooks.
+  |
+  +-- Hatchlings out
+  |     -> CALL NOW
+  |     -> Turn off nearby lights and keep people and dogs away.
+  |     -> Do not pick them up or shepherd them.
+  |
+  +-- Swimming oddly
+        -> WATCH FROM SHORE / CALL
+        -> Record direction and distant video if safe.
+        -> Do not enter the water.
+
+
+10. DOLPHIN, WHALE OR DUGONG
+============================
+
+What are you seeing?
+  |
+  +-- Stranded or in shallows
+  +-- Tangled
+  +-- Distressed or behaving oddly
+  +-- Dead
+        -> CALL NOW: local team plus marine stranding hotline
+        -> Keep people, dogs, drones, boards and vessels well away.
+        -> Note landmarks, tide, breathing, movement, direction and nearby hazards.
+        -> Do not touch, push out, hold upright or approach on the water.
+
+
+11. SHARK OR RAY
+================
+
+Hazard shown before choices:
+  Do not enter the water or approach the head, mouth or tail. A stranded or entangled shark
+  or ray can thrash without warning.
+
+What are you seeing?
+  |
+  +-- Stranded or washed up
+  |     -> CALL NOW
+  |     -> Keep people and dogs well away.
+  |     -> Mark the exact beach position and tide line.
+  |     -> Do not touch, drag or push it into water.
+  |
+  +-- Tangled or hooked
+  |     -> CALL NOW
+  |     -> Record the gear and location from shore or another secure position.
+  |     -> Keep water users away.
+  |     -> Do not enter the water, pull line, remove hooks or restrain it.
+  |
+  +-- Distressed in shallow water
+  |     -> CALL NOW
+  |     -> Ask people to leave the water calmly.
+  |     -> Watch its direction from land.
+  |     -> Do not wade, swim, paddle closer or herd it.
+  |
+  +-- Healthy sighting
+        -> LEAVE THE WATER / WATCH FROM LAND
+        -> Alert nearby water users or lifesavers.
+        -> Record location and direction without following.
+
+[WRM VERIFY shark and ray species, common incidents, responder route and official reporting]
+[WRM ADD local rescue lessons from previous shark rescues]
+
+
+12. PELICAN OR LARGE WATERBIRD
+==============================
+
+Classification:
+  A pelican is a waterbird. It is not a bird of prey.
+  It gets its own app tile because risk and rescue questions matter more than taxonomy.
+
+Hazard shown before choices:
+  A distressed pelican's long beak and powerful wings can injure a person's face or eyes.
+
+What is wrong?
+  |
+  +-- Hooked or tangled
+  |     -> CALL NOW
+  |     -> Keep people and dogs away. Note trailing line and where it moves.
+  |     -> Do not grab its beak, wings or neck.
+  |     -> Do not cut trailing line or pull a hook.
+  |
+  +-- Cannot fly or visibly hurt
+  |     -> CALL NOW
+  |     -> Keep a clear circle around it. Note whether a wing is drooping.
+  |     -> Do not chase, cover or throw it into the air.
+  |
+  +-- Oiled or looks sick
+  |     -> CALL NOW
+  |     -> Keep the area quiet.
+  |     -> Do not wash, feed or handle it.
+  |
+  +-- Healthy sighting
+        -> LOG / WATCH
+        -> Keep dogs away and let it move freely.
+
+[WRM VERIFY pelican-specific safe-distance and caller wording]
+[WRM ADD other large waterbirds needing this same route]
+
+
+13. OTHER SEABIRD OR SHOREBIRD
+==============================
+
+Hazard shown before choices:
+  Any distressed bird may peck, scratch, flap or strike at eyes. Keep face and hands away.
+
+What is wrong?
+  |
+  +-- Hooked or tangled
+  |     -> CALL NOW
+  |     -> Keep people and dogs back; watch if it moves; note trailing line.
+  |     -> Do not cut it free or pull a hook.
+  |
+  +-- Cannot fly
+  |     -> CALL NOW
+  |     -> Record whether a wing is drooping.
+  |     -> Do not chase or throw it into the air.
+  |
+  +-- Oiled or looks sick
+  |     -> CALL NOW
+  |     -> Do not wash, feed or handle it.
+  |
+  +-- Chick alone
+        -> WATCH FROM A DISTANCE
+        -> Keep dogs leashed and look for parents without moving closer.
+        -> Call if clearly hurt or still alone.
+
+
+14. LAND BIRD
+=============
+
+Hazard shown before choices:
+  Any distressed bird may peck, scratch or strike at eyes. Do not handle it unless a trained
+  responder directs you.
+
+What happened?
+  |
+  +-- Hit a window or vehicle
+  |     -> CALL / WATCH
+  |     -> Keep pets and people away; note whether it recovers.
+  |     -> Call immediately if bleeding or badly injured.
+  |     -> Do not throw it into the air.
+  |
+  +-- Caught by a cat or dog
+  |     -> CALL NOW even if it looks well
+  |     -> Secure the pet and keep the bird in sight from a distance.
+  |
+  +-- Baby on the ground
+  |     -> Is it feathered and hopping, or bald / eyes closed?
+  |          +-- Feathered -> WATCH for parents; keep pets in.
+  |          +-- Bald / eyes closed -> CALL NOW.
+  |
+  +-- Tangled or hooked
+        -> CALL NOW
+        -> Keep the area calm.
+        -> Do not cut it free or pull hooks.
+
+
+15. BIRD OF PREY
+================
+
+Hazard shown before choices:
+  Beak and talons can cause serious injury. Stay well back.
+
+What is happening?
+  |
+  +-- Hurt or grounded
+  +-- Tangled or caught
+  |     -> CALL NOW
+  |     -> Keep spectators and dogs away and record an exact landmark.
+  |     -> Do not approach, cover, cut material or handle it.
+  |
+  +-- Healthy sighting
+        -> LOG / WATCH
+        -> Do not approach nests or roosts.
+
+
+16. FLYING-FOX OR BAT
+=====================
+
+Hazard shown before choices:
+  Never touch a bat, even if it looks dead. Only vaccinated, trained handlers approach.
+
+What is happening?
+  |
+  +-- On the ground or hurt
+  +-- Caught on a fence or net
+  +-- Several sick or dead
+  |     -> URGENT SPECIALIST CALL
+  |     -> Move people and pets well away.
+  |     -> Watch from a secure distance.
+  |     -> Do not touch the bat or material around it.
+  |
+  +-- Someone was scratched, bitten or exposed to saliva
+        -> HUMAN HEALTH ACTION
+        -> Wash affected skin thoroughly with soap and running water.
+        -> Seek urgent medical advice.
+        -> Call 000 if the person is in immediate danger.
+        -> Do not catch the bat.
+
+[WRM VERIFY exact Queensland Health wording and the preferred medical contact route]
+
+
+17. OTHER ANIMAL
+================
+
+Which is the safest description?
+  |
+  +-- Injured, trapped or distressed
+  |     -> CALL NOW
+  |     -> Keep people and pets away.
+  |     -> Record location and only what can be seen safely.
+  |
+  +-- May be dangerous
+  |     -> MOVE AWAY / CALL
+  |     -> Put a solid barrier or safe distance between people and the animal.
+  |     -> Do not identify, contain or approach it.
+  |
+  +-- Looks healthy
+        -> LOG / WATCH
+        -> Observe without disturbing or feeding it.
+
+
+18. NOT SURE
+============
+
+What can you safely tell from where you are?
+  |
+  +-- It looks hurt or cannot move
+  |     -> CALL NOW
+  |     -> Keep people and pets away and mark the exact location.
+  |     -> Do not move closer to identify it.
+  |
+  +-- It may be dangerous
+  |     -> MOVE EVERYONE AWAY / CALL
+  |     -> Use a solid barrier or increase distance.
+  |     -> Do not approach, trap or photograph it up close.
+  |
+  +-- It is moving normally
+        -> LOG / WATCH
+        -> Keep a respectful distance and do not follow it.
+
+
+DETAILS TO COLLECT AFTER THE SAFETY ACTION
+==========================================
+
+Only collect these when the reporter can do so without moving closer or delaying a call:
+
+  Exact current location
+    - GPS from the reporter's phone
+    - map point
+    - beach access number, road, house, campsite or landmark
+    - whether the animal has moved since first seen
+
+  Time
+    - time first seen
+    - time of latest confirmed sighting
+
+  Animal
+    - selected group
+    - possible species only if safely visible
+    - number of animals
+    - approximate size
+
+  Situation
+    - alive / dead / not sure
+    - stationary / mobile and direction
+    - visible injury or unusual behaviour
+    - trapped, hooked, tangled or contaminated
+    - nearby road, water, tide, powerline, fire, dogs, cats, people or boats
+
+  Evidence
+    - photo or short video only from the existing safe position
+    - never require a photo
+    - preserve the original file, time and GPS if available
+
+  Contact
+    - reporter name and callback number, optional
+    - whether the reporter can safely remain nearby
+
+
+SMS / MMS HANDOFF SHAPE
+=======================
+
+The app should condense the completed branch to something like:
+
+  WRM ALERT | SHARK OR RAY | CALL NOW
+  Stranded or washed up
+  Cylinder Beach, access 3 | GPS -27.xxxxxx, 153.xxxxxx
+  Alive, approx 1.5 m, tide rising, dog and people nearby
+  Photo attached | reporter can remain 10 minutes
+  Case code: WRM-YYYYMMDD-HHMM
+  [compact import packet]
+
+[WRM VERIFY the exact first line, abbreviations, mandatory facts and case code format]
+
+
+RESPONDER-ONLY TREE STILL TO BE WRITTEN WITH THE TEAM
+=====================================================
+
+The public tree must not guess the operational steps for a qualified responder.
+Wildlife Rescue Minjerribah should define separate branches for:
+
+  Accept / decline / reassign a case
+  Specialist and equipment required
+  En route / arrived / animal not found
+  Safe scene assessment
+  Capture or field treatment
+  Transport destination and handover
+  Duplicate reports and merged sightings
+  Close case
+  Later outcome: survived / in care / transferred / released / died / unknown
+  Correct or append a closed case
+  Export for reporting, grants, training and hotspot analysis
+
+
+SOURCES USED FOR THE FIRST DRAFT
+================================
+
+These sources support broad Queensland safety and reporting principles. They do not replace
+Wildlife Rescue Minjerribah's local experience:
+
+Queensland Government - helping sick, injured or orphaned wildlife
+https://www.qld.gov.au/environment/plants-animals/wildlife/injured-and-orphaned-wildlife/injured
+
+Queensland Government - marine wildlife strandings
+https://www.qld.gov.au/environment/plants-animals/wildlife/marine-strandings/what-you-can-do
+
+Queensland Government - snakes in south-east Queensland
+https://environment.qld.gov.au/wildlife/animals/living-with/snakes/near-you/south-east-qld
+
+Queensland Government - snake identification questions
+https://environment.qld.gov.au/wildlife/animals/living-with/snakes/frequent-questions
+
+Queensland Poisons Information Centre - snake bites
+https://www.poisonsinfo.health.qld.gov.au/bites-and-stings/snake-bites
+
+Queensland Government - living with kangaroos and wallabies
+https://www.qld.gov.au/environment/plants-animals/animals/living-with/kangaroos
+
+Australian Museum - yellow-bellied sea snake
+https://australian.museum/learn/animals/reptiles/yellow-bellied-sea-snake/
+
+
+FINAL APPROVAL
+==============
+
+Clinical / first-aid wording approved by: ____________________  Date: __________
+Snake routes approved by: __________________________________  Date: __________
+Bat routes approved by: ____________________________________  Date: __________
+Marine routes approved by: _________________________________  Date: __________
+Bird routes approved by: ___________________________________  Date: __________
+Macropod routes approved by: ________________________________  Date: __________
+Public contact routing approved by: _________________________  Date: __________
+Overall Wildlife Rescue Minjerribah approval: ______________  Date: __________

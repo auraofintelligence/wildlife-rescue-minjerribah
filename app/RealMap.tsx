@@ -1,7 +1,18 @@
 "use client";
 
 import { layers, namedFlavor } from "@protomaps/basemaps";
-import { LocateFixed, Navigation } from "lucide-react";
+import {
+  Eye,
+  EyeOff,
+  Layers3,
+  LocateFixed,
+  Map as MapIcon,
+  Navigation,
+  PawPrint,
+  Route,
+  Satellite,
+  Tags,
+} from "lucide-react";
 import maplibregl, {
   type GeoJSONSource,
   type LngLatLike,
@@ -15,14 +26,14 @@ import { useEffect, useRef, useState } from "react";
 import type { CaseRecord, Position } from "./page";
 
 const ISLAND_BOUNDS: [[number, number], [number, number]] = [
-  [153.34, -27.81],
-  [153.58, -27.28],
+  [153.35, -27.78],
+  [153.57, -27.3],
 ];
 
-const INITIAL_BOUNDS: [[number, number], [number, number]] = [
-  [153.36, -27.76],
-  [153.56, -27.31],
-];
+const INITIAL_CENTRE: [number, number] = [153.45, -27.53];
+
+const QUEENSLAND_IMAGERY =
+  "https://spatial-img.information.qld.gov.au/arcgis/rest/services/Basemaps/LatestStateProgram_AllUsers/ImageServer/tile/{z}/{y}/{x}";
 
 function createMapStyle(): StyleSpecification {
   const flavour = {
@@ -54,6 +65,9 @@ function createMapStyle(): StyleSpecification {
     city_label_halo: "#f4f1e8",
   };
 
+  const fieldLayers = layers("protomaps", flavour, { lang: "en" });
+  const [backgroundLayer, ...detailLayers] = fieldLayers;
+
   return {
     version: 8,
     glyphs: `${window.location.origin}/maps/fonts/{fontstack}/{range}.pbf`,
@@ -65,9 +79,62 @@ function createMapStyle(): StyleSpecification {
         attribution:
           '<a href="https://github.com/protomaps/basemaps">Protomaps</a> © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
       },
+      "qld-imagery": {
+        type: "raster",
+        tiles: [QUEENSLAND_IMAGERY],
+        tileSize: 256,
+        minzoom: 0,
+        maxzoom: 20,
+        attribution:
+          "Imagery © State of Queensland; © Planet Labs Netherlands B.V., Planet and Geoplex",
+      },
     },
-    layers: layers("protomaps", flavour, { lang: "en" }),
+    layers: [
+      backgroundLayer,
+      {
+        id: "qld-aerial",
+        type: "raster",
+        source: "qld-imagery",
+        layout: { visibility: "none" },
+        paint: {
+          "raster-fade-duration": 240,
+          "raster-saturation": -0.08,
+          "raster-contrast": 0.06,
+        },
+      },
+      ...detailLayers,
+    ],
   };
+}
+
+function applyMapLayers(
+  map: MapLibreMap,
+  view: "field" | "aerial",
+  showRoads: boolean,
+  showLabels: boolean,
+) {
+  if (!map.isStyleLoaded()) return;
+
+  map.setLayoutProperty(
+    "qld-aerial",
+    "visibility",
+    view === "aerial" ? "visible" : "none",
+  );
+
+  map.getStyle().layers.forEach((layer) => {
+    if (!("source" in layer) || layer.source !== "protomaps") return;
+
+    const isRoad = layer.id.startsWith("roads_");
+    const isLabel = layer.type === "symbol";
+    const visibility =
+      (isRoad && !showRoads) ||
+      (isLabel && !showLabels) ||
+      (view === "aerial" && !isRoad && !isLabel)
+        ? "none"
+        : "visible";
+
+    map.setLayoutProperty(layer.id, "visibility", visibility);
+  });
 }
 
 function accuracyArea(position: Position) {
@@ -97,6 +164,15 @@ function accuracyArea(position: Position) {
   };
 }
 
+function isOnMinjerribah(latitude: number, longitude: number) {
+  return (
+    longitude >= ISLAND_BOUNDS[0][0] &&
+    longitude <= ISLAND_BOUNDS[1][0] &&
+    latitude >= ISLAND_BOUNDS[0][1] &&
+    latitude <= ISLAND_BOUNDS[1][1]
+  );
+}
+
 export function RealMap({
   livePosition,
   locationEnabled,
@@ -116,8 +192,14 @@ export function RealMap({
   const liveMarkerRef = useRef<Marker | null>(null);
   const caseMarkersRef = useRef<Marker[]>([]);
   const centredOnReporterRef = useRef(false);
+  const activeViewRef = useRef<"field" | "aerial">("aerial");
   const [mapReady, setMapReady] = useState(false);
   const [mapError, setMapError] = useState("");
+  const [mapView, setMapView] = useState<"field" | "aerial">("aerial");
+  const [layersOpen, setLayersOpen] = useState(false);
+  const [showRoads, setShowRoads] = useState(true);
+  const [showLabels, setShowLabels] = useState(true);
+  const [showCases, setShowCases] = useState(true);
 
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
@@ -129,10 +211,10 @@ export function RealMap({
     const map = new maplibregl.Map({
       container: containerRef.current,
       style: createMapStyle(),
-      bounds: INITIAL_BOUNDS,
-      fitBoundsOptions: { padding: 18 },
+      center: INITIAL_CENTRE,
+      zoom: 11.4,
       maxBounds: ISLAND_BOUNDS,
-      minZoom: 9,
+      minZoom: 11.1,
       maxZoom: 16,
       attributionControl: false,
       dragRotate: false,
@@ -182,9 +264,12 @@ export function RealMap({
       setMapReady(true);
     });
 
-    map.on("error", (event) => {
-      if (event.error) {
-        setMapError("The field map could not finish loading");
+    map.on("error", () => {
+      if (activeViewRef.current === "aerial") {
+        setMapError(
+          "Aerial imagery is unavailable. The offline field map is now showing.",
+        );
+        setMapView("field");
       }
     });
 
@@ -204,6 +289,15 @@ export function RealMap({
 
   useEffect(() => {
     const map = mapRef.current;
+    activeViewRef.current = mapView;
+    if (!map || !mapReady) return;
+
+    if (mapView === "aerial") setMapError("");
+    applyMapLayers(map, mapView, showRoads, showLabels);
+  }, [mapReady, mapView, showLabels, showRoads]);
+
+  useEffect(() => {
+    const map = mapRef.current;
     if (!map || !mapReady) return;
 
     caseMarkersRef.current.forEach((marker) => marker.remove());
@@ -212,7 +306,9 @@ export function RealMap({
     cases
       .filter(
         (record) =>
-          record.latitude !== undefined && record.longitude !== undefined,
+          record.latitude !== undefined &&
+          record.longitude !== undefined &&
+          isOnMinjerribah(record.latitude, record.longitude),
       )
       .forEach((record) => {
         const element = document.createElement("button");
@@ -223,6 +319,7 @@ export function RealMap({
           `${record.animal}: ${record.situation}`,
         );
         element.title = `${record.animal} · ${record.situation}`;
+        element.hidden = !showCases;
         const icon = document.createElement("span");
         icon.textContent = record.icon;
         element.appendChild(icon);
@@ -235,7 +332,7 @@ export function RealMap({
           .addTo(map);
         caseMarkersRef.current.push(marker);
       });
-  }, [cases, mapReady]);
+  }, [cases, mapReady, showCases]);
 
   useEffect(() => {
     const map = mapRef.current;
@@ -245,7 +342,11 @@ export function RealMap({
       "reporter-accuracy",
     ) as GeoJSONSource | undefined;
 
-    if (!locationEnabled || !livePosition) {
+    if (
+      !locationEnabled ||
+      !livePosition ||
+      !isOnMinjerribah(livePosition.latitude, livePosition.longitude)
+    ) {
       liveMarkerRef.current?.remove();
       liveMarkerRef.current = null;
       centredOnReporterRef.current = false;
@@ -292,10 +393,81 @@ export function RealMap({
     }
   }, [livePosition, locationEnabled, mapReady]);
 
+  const outsideIsland =
+    locationEnabled &&
+    livePosition !== null &&
+    !isOnMinjerribah(livePosition.latitude, livePosition.longitude);
+
   return (
     <section className="map-card" aria-label="Minjerribah wildlife map">
       <div className="real-map-wrap">
         <div ref={containerRef} className="real-map" />
+
+        <div className="map-view-switch" role="group" aria-label="Map view">
+          <button
+            type="button"
+            className={mapView === "field" ? "active" : ""}
+            onClick={() => setMapView("field")}
+            aria-pressed={mapView === "field"}
+          >
+            <MapIcon size={16} />
+            Field
+          </button>
+          <button
+            type="button"
+            className={mapView === "aerial" ? "active" : ""}
+            onClick={() => setMapView("aerial")}
+            aria-pressed={mapView === "aerial"}
+          >
+            <Satellite size={16} />
+            Aerial
+          </button>
+        </div>
+
+        <button
+          type="button"
+          className={`map-layers-button ${layersOpen ? "active" : ""}`}
+          onClick={() => setLayersOpen((open) => !open)}
+          aria-expanded={layersOpen}
+          aria-controls="map-layer-menu"
+        >
+          <Layers3 size={18} />
+          Layers
+        </button>
+
+        {layersOpen && (
+          <div className="map-layer-menu" id="map-layer-menu">
+            <span>Show on map</span>
+            <button
+              type="button"
+              onClick={() => setShowRoads((shown) => !shown)}
+              aria-pressed={showRoads}
+            >
+              <Route size={17} />
+              Roads
+              {showRoads ? <Eye size={16} /> : <EyeOff size={16} />}
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowLabels((shown) => !shown)}
+              aria-pressed={showLabels}
+            >
+              <Tags size={17} />
+              Labels
+              {showLabels ? <Eye size={16} /> : <EyeOff size={16} />}
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowCases((shown) => !shown)}
+              aria-pressed={showCases}
+            >
+              <PawPrint size={17} />
+              Cases
+              {showCases ? <Eye size={16} /> : <EyeOff size={16} />}
+            </button>
+            {mapView === "aerial" && <small>Aerial view uses internet</small>}
+          </div>
+        )}
 
         <button
           type="button"
@@ -318,7 +490,13 @@ export function RealMap({
           <i aria-hidden="true" />
         </button>
 
-        {locationMessage && <div className="map-toast">{locationMessage}</div>}
+        {(outsideIsland || locationMessage) && (
+          <div className="map-toast">
+            {outsideIsland
+              ? "Your GPS is outside the Minjerribah map."
+              : locationMessage}
+          </div>
+        )}
         {mapError && (
           <div className="map-error">
             <Navigation size={16} />
@@ -329,7 +507,11 @@ export function RealMap({
 
       <div className="map-caption">
         <div>
-          <span className="eyebrow">Accurate offline field map</span>
+          <span className="eyebrow">
+            {mapView === "aerial"
+              ? "Queensland aerial imagery"
+              : "Clean offline field map"}
+          </span>
           <strong>
             {cases.length
               ? `${cases.length} saved on this phone`

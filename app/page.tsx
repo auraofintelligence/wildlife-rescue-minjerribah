@@ -119,6 +119,7 @@ const animals: Animal[] = [
     icon: "🐨",
     name: "Koala",
     question: "What is the koala doing?",
+    hint: "A frightened or injured koala can cause serious scratches with its claws. Keep people and dogs well back.",
     paths: [
       {
         label: "On the ground",
@@ -159,6 +160,7 @@ const animals: Animal[] = [
     icon: "🦘",
     name: "Kangaroo",
     question: "Which best describes the kangaroo?",
+    hint: "Kangaroos are powerful wild animals. Never corner one: it can kick, scratch and cause severe injury.",
     paths: [
       {
         label: "Alive, cannot get up",
@@ -199,6 +201,7 @@ const animals: Animal[] = [
     icon: "🦘",
     name: "Wallaby",
     question: "Which best describes the wallaby?",
+    hint: "An injured or cornered wallaby may kick, scratch or bite. Give it a clear escape route.",
     paths: [
       {
         label: "Alive, cannot get up",
@@ -356,33 +359,67 @@ const animals: Animal[] = [
     ],
   },
   {
-    id: "lizard",
+    id: "goanna",
     icon: "🦎",
-    name: "Goanna or blue-tongue",
-    question: "What is happening?",
+    name: "Goanna",
+    question: "What is the goanna doing?",
+    hint: "Goannas have powerful claws, teeth and tails. An injured or cornered goanna can cause serious injury.",
     paths: [
       {
         label: "Hurt",
         urgency: "now",
         headline: "Keep back and call",
-        do: ["Secure dogs", "Note its exact location and movement"],
-        avoid: ["Do not corner or handle it"],
-        tags: ["injured"],
+        do: ["Secure dogs and move people well away", "Note its exact location and movement"],
+        avoid: ["Do not corner, handle or block its escape", "Keep hands and face well clear"],
+        tags: ["injured", "claw and bite risk"],
       },
       {
         label: "Stuck or trapped",
         urgency: "now",
         headline: "Keep the area quiet and call",
         do: ["Keep people and dogs away", "Photograph the situation from a distance"],
-        avoid: ["Do not pull or cut anything unless directed"],
-        tags: ["trapped"],
+        avoid: ["Do not pull or cut anything unless directed", "Do not try to restrain it"],
+        tags: ["trapped", "claw and bite risk"],
       },
       {
         label: "Just visiting",
         urgency: "watch",
         headline: "Give it time to move on",
         do: ["Bring dogs inside", "Leave an open escape route"],
-        avoid: ["Do not feed or chase it"],
+        avoid: ["Do not feed, chase or corner it"],
+        tags: ["sighting"],
+      },
+    ],
+  },
+  {
+    id: "blue-tongue",
+    icon: "🦎",
+    name: "Blue-tongue lizard",
+    question: "What is the blue-tongue doing?",
+    hint: "Blue-tongues are not venomous, but a distressed wild animal may still bite. Do not pick it up.",
+    paths: [
+      {
+        label: "Hurt",
+        urgency: "now",
+        headline: "Keep pets back and call",
+        do: ["Note its exact location", "Watch from a comfortable distance"],
+        avoid: ["Do not pick it up, feed it or put it in a box"],
+        tags: ["injured"],
+      },
+      {
+        label: "Stuck or trapped",
+        urgency: "now",
+        headline: "Leave the rescue to a responder",
+        do: ["Keep people and pets away", "Photograph what has trapped it from a distance"],
+        avoid: ["Do not pull, cut or handle it unless a responder directs you"],
+        tags: ["trapped"],
+      },
+      {
+        label: "Just visiting",
+        urgency: "watch",
+        headline: "Give it time to move on",
+        do: ["Bring pets inside", "Leave an open escape route"],
+        avoid: ["Do not chase, feed or relocate it"],
         tags: ["sighting"],
       },
     ],
@@ -468,10 +505,93 @@ const animals: Animal[] = [
     ],
   },
   {
+    id: "shark",
+    icon: "🦈",
+    name: "Shark or ray",
+    question: "What are you seeing?",
+    hint: "Do not enter the water or approach the head, mouth or tail. A stranded or entangled shark or ray can thrash without warning.",
+    paths: [
+      {
+        label: "Stranded or washed up",
+        urgency: "now",
+        headline: "Clear the area and call now",
+        do: ["Keep people and dogs well away", "Mark the exact beach position and tide line", "Call Wildlife Rescue Minjerribah"],
+        avoid: ["Do not touch, drag or push it into the water", "Do not stand near its head or tail"],
+        tags: ["marine stranding", "dangerous animal"],
+      },
+      {
+        label: "Tangled or hooked",
+        urgency: "now",
+        headline: "Keep clear and call now",
+        do: ["Record the gear and exact location from shore or a secure position", "Keep other water users away"],
+        avoid: ["Do not enter the water, pull the line or remove hooks", "Do not attempt to restrain it"],
+        tags: ["entanglement", "dangerous animal"],
+      },
+      {
+        label: "Distressed in shallow water",
+        urgency: "now",
+        headline: "Get everyone out and call",
+        do: ["Tell people to leave the water calmly", "Watch its direction from land", "Call Wildlife Rescue Minjerribah"],
+        avoid: ["Do not wade, swim or paddle closer", "Do not herd it towards open water"],
+        tags: ["marine", "dangerous animal"],
+      },
+      {
+        label: "Healthy sighting",
+        urgency: "watch",
+        headline: "Leave the water and give it space",
+        do: ["Alert nearby water users or lifesavers", "Note its location and direction from land"],
+        avoid: ["Do not follow it or enter the water for a photo"],
+        tags: ["sighting", "marine"],
+      },
+    ],
+  },
+  {
+    id: "pelican",
+    icon: "🪿",
+    name: "Pelican or large waterbird",
+    question: "What is wrong?",
+    hint: "Pelicans are waterbirds, not birds of prey. Their long beaks and powerful wings can injure your face or eyes when distressed.",
+    paths: [
+      {
+        label: "Hooked or tangled",
+        urgency: "now",
+        headline: "Keep well back and call",
+        do: ["Keep people and dogs away", "Watch where it moves", "Note any trailing line or hook"],
+        avoid: ["Do not grab its beak, wings or neck", "Do not cut trailing line or pull a hook"],
+        tags: ["fishing gear", "beak risk"],
+      },
+      {
+        label: "Cannot fly or visibly hurt",
+        urgency: "now",
+        headline: "Give it room and call",
+        do: ["Keep a clear circle around the bird", "Record whether a wing is drooping"],
+        avoid: ["Do not chase, cover or throw it into the air", "Keep your face and eyes well away"],
+        tags: ["grounded", "beak risk"],
+      },
+      {
+        label: "Oiled or looks sick",
+        urgency: "now",
+        headline: "Do not touch it",
+        do: ["Keep the area quiet", "Call with its exact location"],
+        avoid: ["Do not wash, feed or handle it"],
+        tags: ["sick"],
+      },
+      {
+        label: "Healthy sighting",
+        urgency: "watch",
+        headline: "Give it normal space",
+        do: ["Keep dogs away and let it move freely"],
+        avoid: ["Do not feed or crowd it"],
+        tags: ["sighting"],
+      },
+    ],
+  },
+  {
     id: "seabird",
     icon: "🪽",
-    name: "Seabird or shorebird",
+    name: "Other seabird or shorebird",
     question: "What is wrong?",
+    hint: "Any distressed bird may peck, scratch, flap or strike at eyes. Keep your face and hands away.",
     paths: [
       {
         label: "Hooked or tangled",
@@ -512,6 +632,7 @@ const animals: Animal[] = [
     icon: "🐦",
     name: "Land bird",
     question: "What happened?",
+    hint: "Any distressed bird may peck, scratch or strike at eyes. Do not handle it unless a trained responder directs you.",
     paths: [
       {
         label: "Hit a window or vehicle",
@@ -811,6 +932,10 @@ Case: ${savedCase.id}
                 <span className="eyebrow">First, from a safe distance</span>
                 <h2>What animal can you see?</h2>
                 <p className="lead">It is okay not to know. Never move closer just to identify it.</p>
+                <div className="universal-safety">
+                  <ShieldAlert size={20} />
+                  <span><strong>Injured, trapped or distressed?</strong> Assume it may defend itself. Keep your face, hands, children and pets well away.</span>
+                </div>
                 <div className="animal-grid">
                   {animals.map((item) => (
                     <button key={item.id} className="animal-choice" onClick={() => chooseAnimal(item)}>
@@ -827,7 +952,10 @@ Case: ${savedCase.id}
                 <span className="animal-hero">{animal.icon}</span>
                 <span className="eyebrow">{animal.name}</span>
                 <h2>{animal.question}</h2>
-                {animal.hint && <div className="safety-note"><ShieldAlert size={19} /><span>{animal.hint}</span></div>}
+                <div className="safety-note">
+                  <ShieldAlert size={19} />
+                  <span>{animal.hint ?? "An injured, trapped or distressed wild animal may defend itself. Keep back and do not handle it."}</span>
+                </div>
                 <div className="path-list">
                   {animal.paths.map((item) => (
                     <button key={item.label} className="path-choice" onClick={() => choosePath(item)}>
