@@ -1198,14 +1198,15 @@ export default function Home() {
 
       <AnimatePresence mode="wait">
         {activeTab === "map" ? (
-          <motion.div key="map-tab" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-            <RealMap
+          <motion.div className="map-tab-frame" key="map-tab" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <div className="map-tab">
+              <RealMap
               livePosition={livePosition}
               locationEnabled={locationEnabled}
               locationMessage={locationMessage}
               onToggleLocation={toggleLocation}
               cases={cases}
-            />
+              />
 
             <section className="help-panel">
               <span className="eyebrow">Safety first · takes about 30 seconds</span>
@@ -1229,7 +1230,8 @@ export default function Home() {
                   Open cases
                 </button>
               </div>
-            </section>
+              </section>
+            </div>
           </motion.div>
         ) : (
           <motion.section className="cases-page" key="cases-tab" initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -16 }}>

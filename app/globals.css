@@ -131,6 +131,11 @@ button {
   color: white;
 }
 
+.map-tab-frame,
+.map-tab {
+  min-height: 0;
+}
+
 .real-map-wrap {
   height: min(64dvh, 560px);
   min-height: 430px;
@@ -1342,6 +1347,157 @@ h2 {
   .flow-sheet {
     margin-bottom: 22px;
     border-radius: 26px;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 620px) {
+  html,
+  body {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  body {
+    padding: 0;
+    background: #dceae5;
+  }
+
+  .app-shell {
+    width: 100%;
+    max-width: none;
+    min-height: 100dvh;
+    height: 100dvh;
+    padding-bottom: 0;
+    border-radius: 0;
+    display: grid;
+    grid-template-rows: 58px minmax(0, 1fr);
+    overflow: hidden;
+    box-shadow: none;
+  }
+
+  .topbar {
+    height: 58px;
+    padding: 9px 14px;
+  }
+
+  .brand-mark {
+    width: 34px;
+    height: 34px;
+    font-size: 18px;
+  }
+
+  .brand strong {
+    font-size: 16px;
+  }
+
+  .brand div span {
+    font-size: 8px;
+  }
+
+  .call-pill {
+    min-height: 38px;
+    padding: 0 13px;
+    font-size: 12px;
+  }
+
+  .map-tab-frame {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .map-tab {
+    min-height: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1.7fr) minmax(255px, .8fr);
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .map-card {
+    min-height: 0;
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
+  }
+
+  .real-map-wrap {
+    height: auto;
+    min-height: 0;
+  }
+
+  .map-caption {
+    min-height: 48px;
+    padding: 7px 13px;
+  }
+
+  .map-caption strong {
+    font-size: 13px;
+  }
+
+  .help-panel {
+    min-height: 0;
+    padding: 18px 16px 72px;
+    overflow-y: auto;
+    border-left: 1px solid var(--line);
+  }
+
+  .help-panel h1,
+  .cases-page h1 {
+    font-size: clamp(25px, 4vw, 34px);
+  }
+
+  .help-panel > p {
+    margin-bottom: 13px;
+    font-size: 13px;
+  }
+
+  .start-button {
+    min-height: 64px;
+    border-radius: 16px;
+    grid-template-columns: 42px 1fr auto;
+  }
+
+  .start-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 13px;
+  }
+
+  .quick-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .quick-actions button {
+    min-height: 44px;
+  }
+
+  .bottom-nav {
+    left: auto;
+    right: 0;
+    bottom: 0;
+    transform: none;
+    width: min(340px, 35vw);
+    height: 58px;
+    padding: 6px 58px 6px 24px;
+    border-radius: 18px 0 0 0;
+    border-left: 1px solid var(--line);
+  }
+
+  .bottom-nav button:not(.rescue-nav) {
+    width: 52px;
+    height: 44px;
+  }
+
+  .rescue-nav {
+    width: 54px;
+    height: 54px;
+    top: -18px;
+  }
+
+  .cases-page {
+    min-height: 0;
+    height: 100%;
+    overflow-y: auto;
+    padding: 18px 18px 72px;
   }
 }
 

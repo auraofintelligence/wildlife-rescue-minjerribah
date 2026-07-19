@@ -83,6 +83,13 @@ test("keeps offline, GPS, real-map and safety features in the product source", a
   assert.doesNotMatch(realMap, /clip-path|polygon\(/);
   assert.match(styles, /\.real-map\.maplibregl-map/);
   assert.match(styles, /height:\s*100%/);
+  assert.match(page, /className="map-tab-frame"/);
+  assert.match(page, /className="map-tab"/);
+  assert.match(styles, /@media\s*\(orientation:\s*landscape\)\s*and\s*\(max-height:\s*620px\)/);
+  assert.match(styles, /max-width:\s*none/);
+  assert.match(styles, /\.map-tab\s*\{/);
+  assert.match(styles, /grid-template-columns:\s*minmax\(0,\s*1\.7fr\)\s*minmax\(255px,\s*\.8fr\)/);
+  assert.match(styles, /\.real-map-wrap\s*\{[\s\S]*height:\s*auto/);
   assert.match(serviceWorker, /caches\.open/);
   assert.match(serviceWorker, /servePmtilesRange/);
   assert.ok(mapArchive.byteLength > 1_000_000);
