@@ -1332,6 +1332,7 @@ h2 {
 
 .case-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 7px;
   margin-top: 6px;
 }
@@ -1350,6 +1351,12 @@ h2 {
   text-decoration: none;
   font-size: 11px;
   font-weight: 900;
+}
+
+.case-actions .danger {
+  border-color: rgba(189, 62, 48, .3);
+  background: #fff0ea;
+  color: var(--coral-deep);
 }
 
 .status-light {

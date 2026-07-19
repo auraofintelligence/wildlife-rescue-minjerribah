@@ -56,6 +56,9 @@ test("keeps offline, GPS, real-map and safety features in the product source", a
   assert.match(page, /Import case to this phone/);
   assert.match(page, /Paste a WRM alert text/);
   assert.match(page, /copyCaseAlert/);
+  assert.match(page, /deleteLocalCase/);
+  assert.match(page, /deleted from this phone/);
+  assert.match(page, /Sure\?/);
   assert.match(page, /sms:\?/);
   assert.match(page, /isLocalPreview/);
   assert.match(page, /Draft guidance awaiting Wildlife Rescue Minjerribah review/);

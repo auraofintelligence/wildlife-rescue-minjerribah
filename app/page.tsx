@@ -14,6 +14,7 @@ import {
   Send,
   ShieldAlert,
   Sparkles,
+  Trash2,
   Upload,
   X,
 } from "lucide-react";
@@ -1162,6 +1163,7 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState<"map" | "cases">("map");
   const [importText, setImportText] = useState("");
   const [caseMessage, setCaseMessage] = useState("");
+  const [deletePendingId, setDeletePendingId] = useState<string | null>(null);
 
   useEffect(() => {
     const saved = localStorage.getItem("wrm-cases");
@@ -1244,6 +1246,23 @@ export default function Home() {
     });
     setImportText("");
     setCaseMessage(`${record.id} imported onto this phone`);
+    window.setTimeout(() => setCaseMessage(""), 3200);
+  }
+
+  function deleteLocalCase(record: CaseRecord) {
+    if (deletePendingId !== record.id) {
+      setDeletePendingId(record.id);
+      setCaseMessage(`Tap delete again to remove ${record.id} from this phone`);
+      return;
+    }
+
+    setCases((current) => {
+      const next = current.filter((item) => item.id !== record.id);
+      localStorage.setItem("wrm-cases", JSON.stringify(next));
+      return next;
+    });
+    setDeletePendingId(null);
+    setCaseMessage(`${record.id} deleted from this phone`);
     window.setTimeout(() => setCaseMessage(""), 3200);
   }
 
@@ -1346,6 +1365,13 @@ export default function Home() {
                           <Send size={15} />
                           SMS
                         </a>
+                        <button
+                          className={deletePendingId === item.id ? "danger" : ""}
+                          onClick={() => deleteLocalCase(item)}
+                        >
+                          <Trash2 size={15} />
+                          {deletePendingId === item.id ? "Sure?" : "Delete"}
+                        </button>
                       </span>
                     </div>
                     <i className={`status-light urgency-${item.urgency}`} />
