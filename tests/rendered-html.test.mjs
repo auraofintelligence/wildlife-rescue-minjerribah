@@ -50,6 +50,13 @@ test("keeps offline, GPS, real-map and safety features in the product source", a
   assert.match(page, /watchPosition/);
   assert.match(page, /enableHighAccuracy:\s*true/);
   assert.match(page, /localStorage\.setItem\("wrm-cases"/);
+  assert.match(page, /function formatCaseAlert/);
+  assert.match(page, /\[WRM-DATA\]/);
+  assert.match(page, /function extractCaseFromAlert/);
+  assert.match(page, /Import case to this phone/);
+  assert.match(page, /Paste a WRM alert text/);
+  assert.match(page, /copyCaseAlert/);
+  assert.match(page, /sms:\?/);
   assert.match(page, /isLocalPreview/);
   assert.match(page, /Draft guidance awaiting Wildlife Rescue Minjerribah review/);
   assert.match(page, /id:\s*"koala"/);

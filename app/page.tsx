@@ -11,8 +11,10 @@ import {
   Phone,
   Plus,
   Radio,
+  Send,
   ShieldAlert,
   Sparkles,
+  Upload,
   X,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
@@ -67,6 +69,47 @@ export type CaseRecord = {
 
 const CONTACT_NUMBER = "0448466556";
 const MARINE_NUMBER = "1300130372";
+
+function encodeCaseData(record: CaseRecord) {
+  return btoa(unescape(encodeURIComponent(JSON.stringify(record))));
+}
+
+function decodeCaseData(encoded: string): CaseRecord | null {
+  try {
+    const record = JSON.parse(decodeURIComponent(escape(atob(encoded))));
+    if (
+      typeof record?.id !== "string" ||
+      typeof record?.animal !== "string" ||
+      typeof record?.urgency !== "string" ||
+      typeof record?.situation !== "string"
+    ) {
+      return null;
+    }
+    return record as CaseRecord;
+  } catch {
+    return null;
+  }
+}
+
+function extractCaseFromAlert(text: string) {
+  const match = /\[WRM-DATA\]([\s\S]+?)\[\/WRM-DATA\]/.exec(text.trim());
+  if (!match) return null;
+  return decodeCaseData(match[1].trim());
+}
+
+function formatCaseAlert(record: CaseRecord) {
+  const location =
+    record.latitude !== undefined
+      ? `${record.latitude.toFixed(5)}, ${record.longitude?.toFixed(5)}`
+      : record.place || "Location needs confirmation";
+
+  return `WRM ALERT - ${record.animal.toUpperCase()} - ${urgencyLabels[record.urgency].toUpperCase()}
+${record.situation}
+${location}
+Case: ${record.id}
+
+[WRM-DATA]${encodeCaseData(record)}[/WRM-DATA]`;
+}
 
 const snakeIdentities: SnakeIdentity[] = [
   {
@@ -1117,6 +1160,8 @@ export default function Home() {
   const [triageOpen, setTriageOpen] = useState(false);
   const [cases, setCases] = useState<CaseRecord[]>([]);
   const [activeTab, setActiveTab] = useState<"map" | "cases">("map");
+  const [importText, setImportText] = useState("");
+  const [caseMessage, setCaseMessage] = useState("");
 
   useEffect(() => {
     const saved = localStorage.getItem("wrm-cases");
@@ -1176,6 +1221,30 @@ export default function Home() {
       localStorage.setItem("wrm-cases", JSON.stringify(next));
       return next;
     });
+  }
+
+  async function copyCaseAlert(record: CaseRecord) {
+    await navigator.clipboard?.writeText(formatCaseAlert(record));
+    setCaseMessage(`${record.id} alert copied`);
+    window.setTimeout(() => setCaseMessage(""), 2600);
+  }
+
+  function importCaseAlert() {
+    const record = extractCaseFromAlert(importText);
+    if (!record) {
+      setCaseMessage("No WRM case data found in that text");
+      return;
+    }
+
+    setCases((current) => {
+      const withoutDuplicate = current.filter((item) => item.id !== record.id);
+      const next = [record, ...withoutDuplicate];
+      localStorage.setItem("wrm-cases", JSON.stringify(next));
+      return next;
+    });
+    setImportText("");
+    setCaseMessage(`${record.id} imported onto this phone`);
+    window.setTimeout(() => setCaseMessage(""), 3200);
   }
 
   const recentCases = useMemo(() => cases.slice(0, 8), [cases]);
@@ -1238,6 +1307,22 @@ export default function Home() {
             <span className="eyebrow">Stored only on this phone</span>
             <h1>Cases & sightings</h1>
             <p className="lead">Local records remain available without reception.</p>
+            <section className="sms-import-panel" aria-label="Import a WRM alert">
+              <label className="text-field">
+                <span>Paste a WRM alert text</span>
+                <textarea
+                  value={importText}
+                  onChange={(event) => setImportText(event.target.value)}
+                  placeholder="Paste the SMS or group-chat alert here"
+                  rows={3}
+                />
+              </label>
+              <button className="import-button" onClick={importCaseAlert} disabled={!importText.trim()}>
+                <Upload size={18} />
+                Import case to this phone
+              </button>
+              {caseMessage && <p className="case-message">{caseMessage}</p>}
+            </section>
             {recentCases.length ? (
               <div className="case-list">
                 {recentCases.map((item) => (
@@ -1247,6 +1332,21 @@ export default function Home() {
                       <strong>{item.animal}</strong>
                       <span>{item.situation}</span>
                       <small>{item.id} · {new Date(item.createdAt).toLocaleString("en-AU")}</small>
+                      <span className="case-location">
+                        {item.latitude !== undefined
+                          ? `${item.latitude.toFixed(5)}, ${item.longitude?.toFixed(5)}`
+                          : item.place || "Location needs confirmation"}
+                      </span>
+                      <span className="case-actions">
+                        <button onClick={() => copyCaseAlert(item)}>
+                          <Clipboard size={15} />
+                          Copy
+                        </button>
+                        <a href={`sms:?&body=${encodeURIComponent(formatCaseAlert(item))}`}>
+                          <Send size={15} />
+                          SMS
+                        </a>
+                      </span>
                     </div>
                     <i className={`status-light urgency-${item.urgency}`} />
                   </article>

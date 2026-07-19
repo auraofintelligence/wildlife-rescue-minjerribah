@@ -1232,6 +1232,50 @@ h2 {
   margin-bottom: 20px;
 }
 
+.sms-import-panel {
+  margin: 0 0 16px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 17px;
+  background: #f3f1e9;
+}
+
+.sms-import-panel .text-field {
+  margin-top: 0;
+}
+
+.sms-import-panel textarea {
+  min-height: 76px;
+  font-size: 14px;
+}
+
+.import-button {
+  width: 100%;
+  min-height: 46px;
+  margin-top: 10px;
+  border: 0;
+  border-radius: 13px;
+  background: var(--forest);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.import-button:disabled {
+  opacity: .38;
+}
+
+.case-message {
+  margin: 9px 2px 0;
+  color: var(--forest);
+  font-size: 11px;
+  font-weight: 800;
+}
+
 .case-list {
   display: flex;
   flex-direction: column;
@@ -1239,7 +1283,7 @@ h2 {
 }
 
 .case-row {
-  min-height: 82px;
+  min-height: 112px;
   padding: 12px;
   border: 1px solid var(--line);
   border-radius: 17px;
@@ -1278,6 +1322,34 @@ h2 {
 .case-row small {
   color: #91a09b;
   font-size: 9px;
+}
+
+.case-location {
+  color: #738780;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.case-actions {
+  display: flex;
+  gap: 7px;
+  margin-top: 6px;
+}
+
+.case-actions button,
+.case-actions a {
+  min-height: 33px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fffdf8;
+  color: var(--forest);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 900;
 }
 
 .status-light {
