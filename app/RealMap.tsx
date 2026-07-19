@@ -6,11 +6,9 @@ import {
   EyeOff,
   Layers3,
   LocateFixed,
-  Map as MapIcon,
   Navigation,
   PawPrint,
   Route,
-  Satellite,
   Tags,
 } from "lucide-react";
 import maplibregl, {
@@ -31,6 +29,7 @@ const ISLAND_BOUNDS: [[number, number], [number, number]] = [
 ];
 
 const INITIAL_CENTRE: [number, number] = [153.45, -27.53];
+const INITIAL_ZOOM = 10.55;
 
 const QUEENSLAND_IMAGERY =
   "https://spatial-img.information.qld.gov.au/arcgis/rest/services/Basemaps/LatestStateProgram_AllUsers/ImageServer/tile/{z}/{y}/{x}";
@@ -109,7 +108,6 @@ function createMapStyle(): StyleSpecification {
 
 function applyMapLayers(
   map: MapLibreMap,
-  view: "field" | "aerial",
   showRoads: boolean,
   showLabels: boolean,
   aerialReady: boolean,
@@ -117,7 +115,7 @@ function applyMapLayers(
   map.setLayoutProperty(
     "qld-aerial",
     "visibility",
-    view === "aerial" ? "visible" : "none",
+    aerialReady ? "visible" : "none",
   );
 
   map.getStyle().layers.forEach((layer) => {
@@ -128,7 +126,7 @@ function applyMapLayers(
     const visibility =
       (isRoad && !showRoads) ||
       (isLabel && !showLabels) ||
-      (view === "aerial" && aerialReady && !isRoad && !isLabel)
+      (aerialReady && !isRoad && !isLabel)
         ? "none"
         : "visible";
 
@@ -191,11 +189,9 @@ export function RealMap({
   const liveMarkerRef = useRef<Marker | null>(null);
   const caseMarkersRef = useRef<Marker[]>([]);
   const centredOnReporterRef = useRef(false);
-  const activeViewRef = useRef<"field" | "aerial">("aerial");
   const [mapReady, setMapReady] = useState(false);
   const [aerialReady, setAerialReady] = useState(false);
   const [mapError, setMapError] = useState("");
-  const [mapView, setMapView] = useState<"field" | "aerial">("aerial");
   const [layersOpen, setLayersOpen] = useState(false);
   const [showRoads, setShowRoads] = useState(true);
   const [showLabels, setShowLabels] = useState(true);
@@ -212,9 +208,9 @@ export function RealMap({
       container: containerRef.current,
       style: createMapStyle(),
       center: INITIAL_CENTRE,
-      zoom: 11.4,
+      zoom: INITIAL_ZOOM,
       maxBounds: ISLAND_BOUNDS,
-      minZoom: 11.1,
+      minZoom: INITIAL_ZOOM,
       maxZoom: 16,
       attributionControl: false,
       dragRotate: false,
@@ -222,13 +218,6 @@ export function RealMap({
       touchPitch: false,
     });
 
-    map.addControl(
-      new maplibregl.NavigationControl({
-        showCompass: false,
-        visualizePitch: false,
-      }),
-      "bottom-right",
-    );
     map.addControl(
       new maplibregl.AttributionControl({ compact: true }),
       "bottom-left",
@@ -277,14 +266,13 @@ export function RealMap({
 
     map.on("error", (event) => {
       if (
-        activeViewRef.current === "aerial" &&
         "sourceId" in event &&
         event.sourceId === "qld-imagery"
       ) {
         setMapError(
-          "Aerial imagery is unavailable. The offline field map is now showing.",
+          "Aerial imagery is unavailable. The backup field map is now showing.",
         );
-        setMapView("field");
+        setAerialReady(false);
       }
     });
 
@@ -304,12 +292,11 @@ export function RealMap({
 
   useEffect(() => {
     const map = mapRef.current;
-    activeViewRef.current = mapView;
     if (!map || !mapReady) return;
 
-    if (mapView === "aerial") setMapError("");
-    applyMapLayers(map, mapView, showRoads, showLabels, aerialReady);
-  }, [aerialReady, mapReady, mapView, showLabels, showRoads]);
+    if (aerialReady) setMapError("");
+    applyMapLayers(map, showRoads, showLabels, aerialReady);
+  }, [aerialReady, mapReady, showLabels, showRoads]);
 
   useEffect(() => {
     const map = mapRef.current;
@@ -418,36 +405,16 @@ export function RealMap({
       <div className="real-map-wrap">
         <div ref={containerRef} className="real-map" />
 
-        <div className="map-view-switch" role="group" aria-label="Map view">
-          <button
-            type="button"
-            className={mapView === "field" ? "active" : ""}
-            onClick={() => setMapView("field")}
-            aria-pressed={mapView === "field"}
-          >
-            <MapIcon size={16} />
-            Field
-          </button>
-          <button
-            type="button"
-            className={mapView === "aerial" ? "active" : ""}
-            onClick={() => setMapView("aerial")}
-            aria-pressed={mapView === "aerial"}
-          >
-            <Satellite size={16} />
-            Aerial
-          </button>
-        </div>
-
         <button
           type="button"
           className={`map-layers-button ${layersOpen ? "active" : ""}`}
           onClick={() => setLayersOpen((open) => !open)}
           aria-expanded={layersOpen}
           aria-controls="map-layer-menu"
+          title="Map layers"
         >
-          <Layers3 size={18} />
-          Layers
+          <Layers3 size={17} />
+          <span>Layers</span>
         </button>
 
         {layersOpen && (
@@ -480,7 +447,7 @@ export function RealMap({
               Cases
               {showCases ? <Eye size={16} /> : <EyeOff size={16} />}
             </button>
-            {mapView === "aerial" && <small>Aerial view uses internet</small>}
+            <small>Aerial imagery needs internet</small>
           </div>
         )}
 
@@ -489,18 +456,19 @@ export function RealMap({
           className={`location-toggle ${locationEnabled ? "is-on" : ""}`}
           onClick={onToggleLocation}
           aria-pressed={locationEnabled}
+          title={locationEnabled ? "Hide my location" : "Show my location"}
         >
           {locationEnabled && !livePosition ? (
             <span className="locating-spinner" aria-hidden="true" />
           ) : (
-            <LocateFixed size={19} />
+            <LocateFixed size={17} />
           )}
           <span>
             {locationEnabled
               ? livePosition
-                ? "My location on"
-                : "Finding my location"
-              : "Show my location"}
+                ? "GPS on"
+                : "Finding GPS"
+              : "My GPS"}
           </span>
           <i aria-hidden="true" />
         </button>
@@ -523,9 +491,7 @@ export function RealMap({
       <div className="map-caption">
         <div>
           <span className="eyebrow">
-            {mapView === "aerial"
-              ? "Queensland aerial imagery"
-              : "Clean offline field map"}
+            Queensland aerial imagery
           </span>
           <strong>
             {cases.length

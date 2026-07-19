@@ -132,8 +132,8 @@ button {
 }
 
 .real-map-wrap {
-  height: min(48dvh, 430px);
-  min-height: 335px;
+  height: min(64dvh, 560px);
+  min-height: 430px;
   position: relative;
   overflow: hidden;
   background: #9acdd1;
@@ -155,11 +155,6 @@ button {
   bottom: 4px;
 }
 
-.maplibregl-ctrl-bottom-right {
-  bottom: 7px;
-  right: 7px;
-}
-
 .maplibregl-ctrl-attrib {
   border-radius: 5px;
   color: #395a53;
@@ -170,68 +165,30 @@ button {
   color: #315f66;
 }
 
-.maplibregl-ctrl-group {
-  border-radius: 12px !important;
-  overflow: hidden;
-  box-shadow: 0 5px 18px rgba(23, 53, 47, .2) !important;
-}
-
-.maplibregl-ctrl-group button {
-  width: 39px;
-  height: 39px;
-}
-
-.map-view-switch {
-  position: absolute;
-  z-index: 14;
-  top: 14px;
-  left: 14px;
-  display: flex;
-  padding: 4px;
-  border: 1px solid rgba(23, 53, 47, .1);
-  border-radius: 24px;
-  background: rgba(255, 253, 248, .93);
-  box-shadow: 0 8px 25px rgba(25, 67, 58, .17);
-  backdrop-filter: blur(9px);
-}
-
-.map-view-switch button {
-  min-height: 36px;
-  padding: 0 10px;
-  border: 0;
-  border-radius: 19px;
-  background: transparent;
-  color: #5e716b;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 11px;
-  font-weight: 850;
-}
-
-.map-view-switch button.active {
-  background: var(--forest-deep);
-  color: white;
-}
-
 .map-layers-button {
   position: absolute;
   z-index: 15;
-  top: 14px;
-  right: 14px;
-  min-height: 44px;
-  padding: 0 12px;
+  top: 10px;
+  right: 10px;
+  width: 36px;
+  height: 36px;
+  padding: 0;
   border: 1px solid rgba(23, 53, 47, .1);
-  border-radius: 22px;
-  background: rgba(255, 253, 248, .93);
+  border-radius: 50%;
+  background: rgba(255, 253, 248, .9);
   color: var(--ink);
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  font-size: 11px;
-  font-weight: 850;
-  box-shadow: 0 8px 25px rgba(25, 67, 58, .17);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 5px 16px rgba(25, 67, 58, .16);
   backdrop-filter: blur(9px);
+}
+
+.map-layers-button span {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
 }
 
 .map-layers-button.active {
@@ -242,15 +199,15 @@ button {
 .map-layer-menu {
   position: absolute;
   z-index: 16;
-  top: 65px;
-  right: 14px;
-  width: 174px;
+  top: 52px;
+  right: 10px;
+  width: 155px;
   padding: 8px;
   border: 1px solid rgba(23, 53, 47, .1);
-  border-radius: 17px;
+  border-radius: 12px;
   background: rgba(255, 253, 248, .97);
   color: var(--ink);
-  box-shadow: 0 12px 32px rgba(18, 49, 43, .23);
+  box-shadow: 0 10px 24px rgba(18, 49, 43, .2);
   backdrop-filter: blur(12px);
 }
 
@@ -266,19 +223,24 @@ button {
 
 .map-layer-menu button {
   width: 100%;
-  min-height: 41px;
-  padding: 0 8px;
+  min-height: 35px;
+  padding: 0 7px;
   border: 0;
-  border-radius: 11px;
+  border-radius: 8px;
   background: transparent;
   color: var(--ink);
   display: grid;
-  grid-template-columns: 20px 1fr 18px;
-  gap: 7px;
+  grid-template-columns: 18px 1fr 16px;
+  gap: 6px;
   align-items: center;
   text-align: left;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 800;
+}
+
+.map-layer-menu button svg {
+  width: 15px;
+  height: 15px;
 }
 
 .map-layer-menu button:active {
@@ -393,28 +355,28 @@ button {
 .location-toggle {
   position: absolute;
   z-index: 12;
-  top: 66px;
-  left: 14px;
-  min-height: 44px;
+  top: 10px;
+  left: 10px;
+  min-height: 36px;
   border: 1px solid rgba(23, 53, 47, .11);
-  border-radius: 23px;
-  background: rgba(255, 253, 248, .92);
+  border-radius: 18px;
+  background: rgba(255, 253, 248, .9);
   color: var(--ink);
-  padding: 0 10px 0 13px;
+  padding: 0 8px 0 9px;
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 12px;
+  gap: 6px;
+  font-size: 10px;
   font-weight: 800;
-  box-shadow: 0 8px 25px rgba(25, 67, 58, .17);
+  box-shadow: 0 5px 16px rgba(25, 67, 58, .16);
   backdrop-filter: blur(7px);
 }
 
 .location-toggle > i {
   display: block;
-  width: 34px;
-  height: 20px;
-  border-radius: 12px;
+  width: 28px;
+  height: 17px;
+  border-radius: 10px;
   background: #c7d1cd;
   position: relative;
   transition: background .2s ease;
@@ -423,8 +385,8 @@ button {
 .location-toggle > i::after {
   content: "";
   position: absolute;
-  width: 16px;
-  height: 16px;
+  width: 13px;
+  height: 13px;
   border-radius: 50%;
   background: white;
   top: 2px;
@@ -438,7 +400,7 @@ button {
 }
 
 .location-toggle.is-on > i::after {
-  transform: translateX(14px);
+  transform: translateX(11px);
 }
 
 .map-toast {
@@ -459,8 +421,8 @@ button {
 }
 
 .map-caption {
-  min-height: 63px;
-  padding: 11px 18px;
+  min-height: 55px;
+  padding: 9px 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -487,7 +449,7 @@ button {
 .map-caption strong {
   margin-top: 3px;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
 }
 
