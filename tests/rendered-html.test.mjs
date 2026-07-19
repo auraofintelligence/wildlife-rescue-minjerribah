@@ -91,8 +91,11 @@ test("keeps offline, GPS, real-map and safety features in the product source", a
   assert.match(realMap, /Cases/);
   assert.match(realMap, /maxBounds:\s*ISLAND_BOUNDS/);
   assert.match(realMap, /INITIAL_ZOOM\s*=\s*10\.55/);
-  assert.match(realMap, /INITIAL_CENTRE:\s*\[number,\s*number\]\s*=\s*\[153\.48,\s*-27\.43\]/);
-  assert.match(serviceWorker, /wrm-shell-v8/);
+  assert.match(realMap, /INITIAL_VIEW_BOUNDS:\s*\[\[number,\s*number\],\s*\[number,\s*number\]\]/);
+  assert.match(realMap, /\[153\.34,\s*-27\.58\]/);
+  assert.match(realMap, /\[153\.57,\s*-27\.4\]/);
+  assert.match(realMap, /fitBounds\(INITIAL_VIEW_BOUNDS/);
+  assert.match(serviceWorker, /wrm-shell-v9/);
   assert.match(realMap, /minZoom:\s*INITIAL_ZOOM/);
   assert.match(realMap, /zoom:\s*Math\.max\(map\.getZoom\(\),\s*14\)/);
   assert.match(realMap, /isOnMinjerribah/);

@@ -28,7 +28,11 @@ const ISLAND_BOUNDS: [[number, number], [number, number]] = [
   [153.57, -27.3],
 ];
 
-const INITIAL_CENTRE: [number, number] = [153.48, -27.43];
+const INITIAL_VIEW_BOUNDS: [[number, number], [number, number]] = [
+  [153.34, -27.58],
+  [153.57, -27.4],
+];
+const INITIAL_CENTRE: [number, number] = [153.46, -27.48];
 const INITIAL_ZOOM = 10.55;
 
 const QUEENSLAND_IMAGERY =
@@ -222,6 +226,11 @@ export function RealMap({
       new maplibregl.AttributionControl({ compact: true }),
       "bottom-left",
     );
+
+    map.fitBounds(INITIAL_VIEW_BOUNDS, {
+      padding: { top: 8, right: 10, bottom: 8, left: 10 },
+      duration: 0,
+    });
 
     map.on("load", () => {
       map.addSource("reporter-accuracy", {
