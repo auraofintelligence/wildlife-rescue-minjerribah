@@ -1127,7 +1127,10 @@ export default function Home() {
         localStorage.removeItem("wrm-cases");
       }
     }
-    if ("serviceWorker" in navigator) {
+    const isLocalPreview = ["localhost", "127.0.0.1"].includes(
+      window.location.hostname,
+    );
+    if ("serviceWorker" in navigator && !isLocalPreview) {
       navigator.serviceWorker.register("/sw.js").catch(() => undefined);
     }
   }, []);

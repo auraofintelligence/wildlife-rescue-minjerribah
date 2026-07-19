@@ -21,6 +21,16 @@ The triage wording is a **working draft**, not approved operational advice.
 Minjerribah's trained and licensed people. Contact details and every decision path must be
 verified before public use. `TRIAGE-TREE.md` is retained as the earlier design draft.
 
+## Hosting status
+
+The current `chatgpt.site` deployment is a private development preview only. It is not the
+public delivery model.
+
+The real volunteer release must use ordinary public HTTPS hosting and a trusted custom domain,
+with no ChatGPT account, app account or AI branding required to open it. The release build must
+remain installable as a PWA and continue working after the phone loses reception. Public access
+should wait until Wildlife Rescue Minjerribah has approved the triage and contact wording.
+
 ## Run it locally on Windows
 
 Open the folder in VS Code, then open its terminal and run:

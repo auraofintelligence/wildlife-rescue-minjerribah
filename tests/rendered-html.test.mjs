@@ -37,9 +37,10 @@ test("server renders the Wildlife Rescue app shell", async () => {
 });
 
 test("keeps offline, GPS, real-map and safety features in the product source", async () => {
-  const [page, realMap, serviceWorker, manifest, mapArchive, triageReview] = await Promise.all([
+  const [page, realMap, styles, serviceWorker, manifest, mapArchive, triageReview] = await Promise.all([
     readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/RealMap.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
     readFile(new URL("../public/sw.js", import.meta.url), "utf8"),
     readFile(new URL("../public/manifest.webmanifest", import.meta.url), "utf8"),
     readFile(new URL("../public/maps/minjerribah.pmtiles", import.meta.url)),
@@ -49,6 +50,7 @@ test("keeps offline, GPS, real-map and safety features in the product source", a
   assert.match(page, /watchPosition/);
   assert.match(page, /enableHighAccuracy:\s*true/);
   assert.match(page, /localStorage\.setItem\("wrm-cases"/);
+  assert.match(page, /isLocalPreview/);
   assert.match(page, /Draft guidance awaiting Wildlife Rescue Minjerribah review/);
   assert.match(page, /id:\s*"koala"/);
   assert.match(page, /id:\s*"snake"/);
@@ -76,6 +78,8 @@ test("keeps offline, GPS, real-map and safety features in the product source", a
   assert.match(realMap, /minZoom:\s*11\.1/);
   assert.match(realMap, /isOnMinjerribah/);
   assert.doesNotMatch(realMap, /clip-path|polygon\(/);
+  assert.match(styles, /\.real-map\.maplibregl-map/);
+  assert.match(styles, /height:\s*100%/);
   assert.match(serviceWorker, /caches\.open/);
   assert.match(serviceWorker, /servePmtilesRange/);
   assert.ok(mapArchive.byteLength > 1_000_000);

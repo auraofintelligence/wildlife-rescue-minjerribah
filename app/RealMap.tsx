@@ -95,7 +95,7 @@ function createMapStyle(): StyleSpecification {
         id: "qld-aerial",
         type: "raster",
         source: "qld-imagery",
-        layout: { visibility: "none" },
+        layout: { visibility: "visible" },
         paint: {
           "raster-fade-duration": 240,
           "raster-saturation": -0.08,
@@ -112,9 +112,8 @@ function applyMapLayers(
   view: "field" | "aerial",
   showRoads: boolean,
   showLabels: boolean,
+  aerialReady: boolean,
 ) {
-  if (!map.isStyleLoaded()) return;
-
   map.setLayoutProperty(
     "qld-aerial",
     "visibility",
@@ -129,7 +128,7 @@ function applyMapLayers(
     const visibility =
       (isRoad && !showRoads) ||
       (isLabel && !showLabels) ||
-      (view === "aerial" && !isRoad && !isLabel)
+      (view === "aerial" && aerialReady && !isRoad && !isLabel)
         ? "none"
         : "visible";
 
@@ -194,6 +193,7 @@ export function RealMap({
   const centredOnReporterRef = useRef(false);
   const activeViewRef = useRef<"field" | "aerial">("aerial");
   const [mapReady, setMapReady] = useState(false);
+  const [aerialReady, setAerialReady] = useState(false);
   const [mapError, setMapError] = useState("");
   const [mapView, setMapView] = useState<"field" | "aerial">("aerial");
   const [layersOpen, setLayersOpen] = useState(false);
@@ -261,11 +261,26 @@ export function RealMap({
           "line-width": 1.5,
         },
       });
+      setAerialReady(true);
       setMapReady(true);
     });
 
-    map.on("error", () => {
-      if (activeViewRef.current === "aerial") {
+    map.on("sourcedata", (event) => {
+      if (
+        event.sourceId === "qld-imagery" &&
+        (event.isSourceLoaded || event.sourceDataType === "content")
+      ) {
+        setAerialReady(true);
+        setMapError("");
+      }
+    });
+
+    map.on("error", (event) => {
+      if (
+        activeViewRef.current === "aerial" &&
+        "sourceId" in event &&
+        event.sourceId === "qld-imagery"
+      ) {
         setMapError(
           "Aerial imagery is unavailable. The offline field map is now showing.",
         );
@@ -293,8 +308,8 @@ export function RealMap({
     if (!map || !mapReady) return;
 
     if (mapView === "aerial") setMapError("");
-    applyMapLayers(map, mapView, showRoads, showLabels);
-  }, [mapReady, mapView, showLabels, showRoads]);
+    applyMapLayers(map, mapView, showRoads, showLabels, aerialReady);
+  }, [aerialReady, mapReady, mapView, showLabels, showRoads]);
 
   useEffect(() => {
     const map = mapRef.current;
