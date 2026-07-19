@@ -5,12 +5,12 @@ Minjerribah (North Stradbroke Island).
 
 ## What this first version proves
 
-- A visual island field map with a voluntary live GPS toggle.
+- A geographically accurate Minjerribah vector map with a voluntary live GPS toggle.
 - Safety-first draft triage across fifteen animal groups.
 - Accurate incident location using GPS, landmarks and field prompts.
 - Cases saved locally on the phone without an account or server.
 - Human-readable responder alerts containing a compact importable data packet.
-- An installable app shell that caches visited resources for offline use.
+- An installable app shell containing its own offline island map.
 
 ## Safety status
 
@@ -37,3 +37,9 @@ npm test
 
 The app stores prototype cases in the browser's local storage. Clearing browser site data
 will clear those cases.
+
+## Map data
+
+The bundled map is a Minjerribah extract of the 19 July 2026 Protomaps basemap,
+derived from OpenStreetMap and Natural Earth data. It is rendered by MapLibre and
+PMTiles. OpenStreetMap attribution remains visible on the map.

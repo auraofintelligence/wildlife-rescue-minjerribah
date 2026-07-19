@@ -36,11 +36,13 @@ test("server renders the Wildlife Rescue app shell", async () => {
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape/i);
 });
 
-test("keeps offline, GPS and safety features in the product source", async () => {
-  const [page, serviceWorker, manifest] = await Promise.all([
+test("keeps offline, GPS, real-map and safety features in the product source", async () => {
+  const [page, realMap, serviceWorker, manifest, mapArchive] = await Promise.all([
     readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/RealMap.tsx", import.meta.url), "utf8"),
     readFile(new URL("../public/sw.js", import.meta.url), "utf8"),
     readFile(new URL("../public/manifest.webmanifest", import.meta.url), "utf8"),
+    readFile(new URL("../public/maps/minjerribah.pmtiles", import.meta.url)),
   ]);
 
   assert.match(page, /watchPosition/);
@@ -49,8 +51,18 @@ test("keeps offline, GPS and safety features in the product source", async () =>
   assert.match(page, /Draft guidance awaiting Wildlife Rescue Minjerribah review/);
   assert.match(page, /id:\s*"koala"/);
   assert.match(page, /id:\s*"snake"/);
+  assert.match(page, /Sea snake/);
+  assert.match(page, /Eastern brown or brown-looking snake/);
+  assert.match(page, /Red-bellied black or similar black snake/);
+  assert.match(page, /Common or green tree snake/);
   assert.match(page, /id:\s*"bat"/);
   assert.match(page, /id:\s*"unsure"/);
+  assert.match(realMap, /maplibregl\.Map/);
+  assert.match(realMap, /minjerribah\.pmtiles/);
+  assert.match(realMap, /OpenStreetMap/);
+  assert.doesNotMatch(realMap, /clip-path|polygon\(/);
   assert.match(serviceWorker, /caches\.open/);
+  assert.match(serviceWorker, /servePmtilesRange/);
+  assert.ok(mapArchive.byteLength > 1_000_000);
   assert.match(manifest, /"display":\s*"standalone"/);
 });

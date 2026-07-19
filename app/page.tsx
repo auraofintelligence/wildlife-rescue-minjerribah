@@ -8,7 +8,6 @@ import {
   Crosshair,
   LocateFixed,
   Map as MapIcon,
-  Navigation,
   Phone,
   Plus,
   Radio,
@@ -18,6 +17,7 @@ import {
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useMemo, useState } from "react";
+import { RealMap } from "./RealMap";
 
 type Urgency = "emergency" | "now" | "soon" | "watch";
 
@@ -39,13 +39,20 @@ type Animal = {
   paths: Path[];
 };
 
-type Position = {
+type SnakeIdentity = {
+  id: string;
+  name: string;
+  danger: "Treat as highly venomous" | "Non-venomous — still keep back" | "Treat as dangerous";
+  cues: string;
+};
+
+export type Position = {
   latitude: number;
   longitude: number;
   accuracy: number;
 };
 
-type CaseRecord = {
+export type CaseRecord = {
   id: string;
   animal: string;
   icon: string;
@@ -60,6 +67,51 @@ type CaseRecord = {
 
 const CONTACT_NUMBER = "0448466556";
 const MARINE_NUMBER = "1300130372";
+
+const snakeIdentities: SnakeIdentity[] = [
+  {
+    id: "unknown",
+    name: "Not sure / cannot see safely",
+    danger: "Treat as dangerous",
+    cues: "The safest and most useful answer. Do not move closer for a better look.",
+  },
+  {
+    id: "sea-snake",
+    name: "Sea snake",
+    danger: "Treat as highly venomous",
+    cues: "In the sea, surf or washed ashore; often has a flattened, paddle-shaped tail.",
+  },
+  {
+    id: "brown",
+    name: "Eastern brown or brown-looking snake",
+    danger: "Treat as highly venomous",
+    cues: "Often slender and fast-moving, but colour can be brown, orange, grey or almost black. Colour alone cannot identify it.",
+  },
+  {
+    id: "red-bellied-black",
+    name: "Red-bellied black or similar black snake",
+    danger: "Treat as highly venomous",
+    cues: "Glossy black above, sometimes with red or pink visible along the lower sides; often near water. Other dangerous snakes can look similar.",
+  },
+  {
+    id: "carpet-python",
+    name: "Carpet python",
+    danger: "Non-venomous — still keep back",
+    cues: "Usually heavy-bodied, olive to brown, with cream and dark blotches forming a repeated pattern.",
+  },
+  {
+    id: "tree-snake",
+    name: "Common or green tree snake",
+    danger: "Non-venomous — still keep back",
+    cues: "Very slender and agile with a long whip-like tail. Colour varies widely from green and olive to brown, black or blue.",
+  },
+  {
+    id: "other",
+    name: "Other / does not match",
+    danger: "Treat as dangerous",
+    cues: "South-east Queensland has many other snake species, including highly venomous ones.",
+  },
+];
 
 const animals: Animal[] = [
   {
@@ -284,6 +336,14 @@ const animals: Animal[] = [
         do: ["Stay well back", "Let it move away", "Call if it is injured or cannot leave"],
         avoid: ["Do not block its escape"],
         tags: ["sighting"],
+      },
+      {
+        label: "Beach, rocks or water",
+        urgency: "now",
+        headline: "Keep clear of the waterline and call",
+        do: ["Keep people, children and dogs well away", "Note whether it is in the water, surf or above the high-tide line", "Photograph only from your existing safe distance"],
+        avoid: ["Do not touch it, push it into the water or assume it is dead", "Do not stand between it and open water"],
+        tags: ["possible sea snake", "dangerous animal"],
       },
       {
         label: "Injured or trapped",
@@ -627,144 +687,12 @@ const animals: Animal[] = [
   },
 ];
 
-const mapPins = [
-  { id: "demo-1", animal: "Koala", icon: "🐨", x: 30, y: 67, state: "watch" },
-  { id: "demo-2", animal: "Seabird", icon: "🪽", x: 71, y: 25, state: "now" },
-  { id: "demo-3", animal: "Wallaby", icon: "🦘", x: 53, y: 49, state: "soon" },
-];
-
 const urgencyLabels: Record<Urgency, string> = {
   emergency: "Danger — act now",
   now: "Call now",
   soon: "Call soon",
   watch: "Keep watch",
 };
-
-function positionOnMap(position: Position) {
-  const west = 153.36;
-  const east = 153.56;
-  const north = -27.34;
-  const south = -27.78;
-  const x = Math.max(4, Math.min(96, ((position.longitude - west) / (east - west)) * 100));
-  const y = Math.max(4, Math.min(96, ((north - position.latitude) / (north - south)) * 100));
-  return { x, y };
-}
-
-function MapView({
-  livePosition,
-  locationEnabled,
-  locationMessage,
-  onToggleLocation,
-  cases,
-}: {
-  livePosition: Position | null;
-  locationEnabled: boolean;
-  locationMessage: string;
-  onToggleLocation: () => void;
-  cases: CaseRecord[];
-}) {
-  const me = livePosition ? positionOnMap(livePosition) : null;
-  const casePins = cases
-    .filter((item) => item.latitude !== undefined && item.longitude !== undefined)
-    .map((item) => ({
-      ...item,
-      ...positionOnMap({
-        latitude: item.latitude!,
-        longitude: item.longitude!,
-        accuracy: 0,
-      }),
-    }));
-
-  return (
-    <section className="map-card" aria-label="Minjerribah wildlife map">
-      <div className="map-surface">
-        <div className="ocean-grain" />
-        <div className="island-shadow" />
-        <div className="island">
-          <div className="lake lake-one" />
-          <div className="lake lake-two" />
-          <div className="track track-one" />
-          <div className="track track-two" />
-          <div className="track track-three" />
-        </div>
-        <span className="place-label point-lookout">Point Lookout</span>
-        <span className="place-label amity">Amity</span>
-        <span className="place-label dunwich">Dunwich</span>
-        <span className="place-label brown-lake">Brown Lake</span>
-        <span className="place-label main-beach">Main Beach</span>
-
-        {mapPins.map((pin) => (
-          <motion.button
-            className={`map-pin pin-${pin.state}`}
-            key={pin.id}
-            style={{ left: `${pin.x}%`, top: `${pin.y}%` }}
-            initial={{ scale: 0, y: 10 }}
-            animate={{ scale: 1, y: 0 }}
-            transition={{ type: "spring", delay: 0.15 }}
-            aria-label={`${pin.animal} map marker`}
-          >
-            {pin.icon}
-          </motion.button>
-        ))}
-
-        {casePins.map((pin) => (
-          <button
-            className={`map-pin pin-${pin.urgency}`}
-            key={pin.id}
-            style={{ left: `${pin.x}%`, top: `${pin.y}%` }}
-            aria-label={`${pin.animal} saved case`}
-          >
-            {pin.icon}
-          </button>
-        ))}
-
-        {me && (
-          <motion.div
-            className="my-location"
-            style={{ left: `${me.x}%`, top: `${me.y}%` }}
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            aria-label="Your current location"
-          >
-            <span className="accuracy-ring" />
-            <span className="location-dot">
-              <Navigation size={13} fill="currentColor" />
-            </span>
-          </motion.div>
-        )}
-
-        <div className="map-title">
-          <span>MINJERRIBAH</span>
-          <small>North Stradbroke Island</small>
-        </div>
-
-        <button
-          type="button"
-          className={`location-toggle ${locationEnabled ? "is-on" : ""}`}
-          onClick={onToggleLocation}
-          aria-pressed={locationEnabled}
-        >
-          <LocateFixed size={19} />
-          <span>{locationEnabled ? "My location on" : "Show my location"}</span>
-          <i aria-hidden="true" />
-        </button>
-
-        {locationMessage && <div className="map-toast">{locationMessage}</div>}
-      </div>
-
-      <div className="map-caption">
-        <div>
-          <span className="eyebrow">Island field map</span>
-          <strong>{cases.length ? `${cases.length} saved on this phone` : "Ready offline"}</strong>
-        </div>
-        <div className="map-legend">
-          <span><i className="legend-dot red" /> urgent</span>
-          <span><i className="legend-dot amber" /> watch</span>
-        </div>
-      </div>
-    </section>
-  );
-}
 
 function TriageFlow({
   livePosition,
@@ -775,15 +703,21 @@ function TriageFlow({
   onClose: () => void;
   onSave: (record: CaseRecord) => void;
 }) {
-  const [step, setStep] = useState<"animal" | "question" | "action" | "report" | "saved">("animal");
+  const [step, setStep] = useState<"animal" | "snake-identify" | "question" | "action" | "report" | "saved">("animal");
   const [animal, setAnimal] = useState<Animal | null>(null);
   const [path, setPath] = useState<Path | null>(null);
+  const [snakeIdentity, setSnakeIdentity] = useState<SnakeIdentity | null>(null);
   const [place, setPlace] = useState("");
   const [useLocation, setUseLocation] = useState(Boolean(livePosition));
   const [savedCase, setSavedCase] = useState<CaseRecord | null>(null);
 
   function chooseAnimal(selected: Animal) {
     setAnimal(selected);
+    setStep(selected.id === "snake" ? "snake-identify" : "question");
+  }
+
+  function chooseSnakeIdentity(selected: SnakeIdentity) {
+    setSnakeIdentity(selected);
     setStep("question");
   }
 
@@ -800,7 +734,10 @@ function TriageFlow({
       animal: animal.name,
       icon: animal.icon,
       urgency: path.urgency,
-      situation: path.label,
+      situation:
+        animal.id === "snake" && snakeIdentity
+          ? `${snakeIdentity.name} · ${path.label}`
+          : path.label,
       createdAt: new Date().toISOString(),
       latitude: useLocation ? livePosition?.latitude : undefined,
       longitude: useLocation ? livePosition?.longitude : undefined,
@@ -829,6 +766,8 @@ Case: ${savedCase.id}
 
   function goBack() {
     if (step === "question") setStep("animal");
+    if (step === "question" && animal?.id === "snake") setStep("snake-identify");
+    if (step === "snake-identify") setStep("animal");
     if (step === "action") setStep("question");
     if (step === "report") setStep("action");
     if (step === "saved") onClose();
@@ -852,8 +791,11 @@ Case: ${savedCase.id}
           <button className="icon-button" onClick={goBack} aria-label="Go back">
             <ArrowLeft size={22} />
           </button>
-          <div className="progress-pips" aria-label={`Step ${["animal", "question", "action", "report", "saved"].indexOf(step) + 1} of 5`}>
-            {["animal", "question", "action", "report"].map((item) => (
+          <div className="progress-pips" aria-label="Triage progress">
+            {(animal?.id === "snake"
+              ? ["animal", "snake-identify", "question", "action", "report"]
+              : ["animal", "question", "action", "report"]
+            ).map((item) => (
               <span key={item} className={item === step ? "active" : ""} />
             ))}
           </div>
@@ -897,14 +839,54 @@ Case: ${savedCase.id}
               </motion.div>
             )}
 
+            {step === "snake-identify" && animal?.id === "snake" && (
+              <motion.div key="snake-identify" className="flow-page" initial={{ opacity: 0, x: 18 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -18 }}>
+                <span className="animal-hero">🐍</span>
+                <span className="eyebrow">Only from where you already are</span>
+                <h2>Which is the closest match?</h2>
+                <div className="safety-note"><ShieldAlert size={19} /><span>Never move closer to identify a snake. A visual match is only a clue, not proof that it is safe.</span></div>
+                <div className="snake-identity-list">
+                  {snakeIdentities.map((identity) => (
+                    <button
+                      key={identity.id}
+                      className={`snake-identity-choice ${identity.id === "unknown" ? "safest-choice" : ""}`}
+                      onClick={() => chooseSnakeIdentity(identity)}
+                    >
+                      <span>
+                        <strong>{identity.name}</strong>
+                        <small>{identity.cues}</small>
+                        <em className={identity.danger.startsWith("Non-venomous") ? "low-danger" : ""}>{identity.danger}</em>
+                      </span>
+                      <ChevronRight size={20} />
+                    </button>
+                  ))}
+                </div>
+                <p className="source-note">Draft identification cues based on Queensland Government guidance. Wildlife Rescue Minjerribah must confirm the island species list.</p>
+              </motion.div>
+            )}
+
             {step === "action" && animal && path && (
               <motion.div key="action" className="flow-page" initial={{ opacity: 0, x: 18 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -18 }}>
                 <div className={`urgency-badge urgency-${path.urgency}`}>
                   <Radio size={17} />
                   {urgencyLabels[path.urgency]}
                 </div>
+                {animal.id === "snake" && snakeIdentity && (
+                  <div className="identity-result">
+                    <span>Possible identification</span>
+                    <strong>{snakeIdentity.name}</strong>
+                    <small>{snakeIdentity.danger}</small>
+                  </div>
+                )}
                 <h2>{path.headline}</h2>
                 <p className="lead">Your safety comes first. Only do what you can from a safe position.</p>
+
+                {animal.id === "snake" && (
+                  <div className="snake-bite-alert">
+                    <strong>Possible bite?</strong>
+                    <span>Call 000 immediately. Keep the person still. Do not wash the bite or try to catch the snake.</span>
+                  </div>
+                )}
 
                 <div className="action-card do-card">
                   <strong><Check size={18} /> Do this now</strong>
@@ -1086,7 +1068,7 @@ export default function Home() {
       <AnimatePresence mode="wait">
         {activeTab === "map" ? (
           <motion.div key="map-tab" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-            <MapView
+            <RealMap
               livePosition={livePosition}
               locationEnabled={locationEnabled}
               locationMessage={locationMessage}

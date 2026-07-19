@@ -19,13 +19,11 @@ export async function generateMetadata(): Promise<Metadata> {
       title,
       description,
       type: "website",
-      images: [{ url: "/og.png", width: 1664, height: 936, alt: "Wildlife Rescue Minjerribah island field map" }],
     },
     twitter: {
-      card: "summary_large_image",
+      card: "summary",
       title,
       description,
-      images: ["/og.png"],
     },
     appleWebApp: {
       capable: true,

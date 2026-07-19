@@ -85,17 +85,44 @@ healthy at night
 - Healthy → **LOG IT.**
 
 ### Snake
-Which snake? (photo cards, judged from where you already stand; never move closer) →
-carpet python / green tree snake / red-bellied black / king brown, or not sure
-- Not sure is the biggest button and is treated as king brown.
-Where is it? → inside a building / yard or campsite / road or bush / it's injured
+Which is the closest match? (judged only from where the person already stands; never move
+closer) → not sure / sea snake / eastern brown or brown-looking snake / red-bellied black
+or similar black snake / carpet python / common or green tree snake / other
+
+- **Not sure / cannot see safely** is the first and most prominent answer. Treat as dangerous.
+- **Sea snake:** in the sea, surf or washed ashore; often a flattened, paddle-shaped tail.
+  Treat as highly venomous. Never touch it, push it into the water or assume it is dead.
+- **Eastern brown or brown-looking:** often slender and fast-moving, but colour may be brown,
+  orange, grey or almost black. Colour cannot identify it. Treat as highly venomous.
+- **Red-bellied black or similar black snake:** glossy black, sometimes red or pink visible
+  along the lower sides; often near water. Other dangerous snakes look similar. Treat as
+  highly venomous.
+- **Carpet python:** usually heavy-bodied, olive to brown, with cream and dark blotches in a
+  repeated pattern. Non-venomous, but still keep back and use a trained catcher.
+- **Common or green tree snake:** very slender and agile with a whip-like tail; colour varies
+  from green and olive to brown, black or blue. Non-venomous, but identification remains
+  uncertain and the person must still keep back.
+- **Other / does not match:** treat as dangerous. South-east Queensland has many additional
+  species, including highly venomous snakes.
+
+The identification is recorded as a **possible match**, never a confirmed species. The action
+does not become less cautious after a non-venomous match.
+
+Where is it? → inside a building / yard or campsite / road or bush / beach, rocks or water /
+it's injured
 - Inside → **NOW, DANGER.** Do: everyone and pets out of the room, shut the internal door,
   watch the exits from a distance. Don't: try to trap, follow or photograph it up close. Call
   the team; they bring in the licensed catcher. If anyone has been bitten: 000 immediately.
 - Yard or campsite → **NOW.** Keep pets and children inside, watch from a window. Call.
 - Road or bush → **SOON.** Give it space; it's passing through. Call if it's injured or won't
   move on. Every venomous sighting is still worth logging.
+- Beach, rocks or water → **NOW.** Keep people, children and dogs away from the waterline.
+  Note whether it is in the water, surf or above the high-tide line. Don't touch it, return it
+  to the water or stand between it and open water. Call.
 - Injured → **NOW.** Keep right back regardless of species. Call.
+
+Every snake action card begins: **Possible bite? Call 000 immediately. Keep the person still.
+Do not wash the bite or try to catch the snake.**
 
 ### Goanna or blue-tongue
 What's happening? → hurt / stuck or trapped / just visiting
