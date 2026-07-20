@@ -6,8 +6,11 @@ import {
   ChevronRight,
   Clipboard,
   Crosshair,
+  Download,
+  Info,
   LocateFixed,
   Map as MapIcon,
+  MapPin,
   Phone,
   Plus,
   Radio,
@@ -66,10 +69,18 @@ export type CaseRecord = {
   longitude?: number;
   place: string;
   status: string;
+  locationSource?: "gps" | "pin" | "description";
 };
 
 const CONTACT_NUMBER = "0448466556";
 const MARINE_NUMBER = "1300130372";
+const PUBLIC_APP_URL =
+  "https://wildlife-rescue-minjerribah.auraofintelligence.workers.dev";
+
+function getCasesUrl() {
+  if (typeof window === "undefined") return `${PUBLIC_APP_URL}/#cases`;
+  return `${window.location.origin}/#cases`;
+}
 
 function encodeCaseData(record: CaseRecord) {
   return btoa(unescape(encodeURIComponent(JSON.stringify(record))));
@@ -98,7 +109,7 @@ function extractCaseFromAlert(text: string) {
   return decodeCaseData(match[1].trim());
 }
 
-function formatCaseAlert(record: CaseRecord) {
+function formatCaseAlert(record: CaseRecord, casesUrl = getCasesUrl()) {
   const location =
     record.latitude !== undefined
       ? `${record.latitude.toFixed(5)}, ${record.longitude?.toFixed(5)}`
@@ -109,7 +120,63 @@ ${record.situation}
 ${location}
 Case: ${record.id}
 
-[WRM-DATA]${encodeCaseData(record)}[/WRM-DATA]`;
+[WRM-DATA]${encodeCaseData(record)}[/WRM-DATA]
+
+Open WRM Cases: ${casesUrl}
+Copy this whole text into the "Paste a WRM alert text" field, then tap "Import case to this phone".`;
+}
+
+function smsHref(record: CaseRecord) {
+  const body = encodeURIComponent(formatCaseAlert(record));
+  const isAppleMobile =
+    typeof navigator !== "undefined" &&
+    /iPhone|iPad|iPod/i.test(navigator.userAgent);
+  return `sms:${CONTACT_NUMBER}${isAppleMobile ? "&" : "?"}body=${body}`;
+}
+
+function downloadFile(filename: string, contents: string, type: string) {
+  const url = URL.createObjectURL(new Blob([contents], { type }));
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  link.click();
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+function csvCell(value: unknown) {
+  return `"${String(value ?? "").replaceAll('"', '""')}"`;
+}
+
+function casesToCsv(records: CaseRecord[]) {
+  const headings = [
+    "case_id",
+    "created_at",
+    "animal",
+    "urgency",
+    "situation",
+    "status",
+    "latitude",
+    "longitude",
+    "location_source",
+    "place",
+  ];
+  const rows = records.map((record) =>
+    [
+      record.id,
+      record.createdAt,
+      record.animal,
+      record.urgency,
+      record.situation,
+      record.status,
+      record.latitude,
+      record.longitude,
+      record.locationSource,
+      record.place,
+    ]
+      .map(csvCell)
+      .join(","),
+  );
+  return [headings.map(csvCell).join(","), ...rows].join("\r\n");
 }
 
 function copyTextWithFallback(text: string) {
@@ -886,10 +953,12 @@ const urgencyLabels: Record<Urgency, string> = {
 
 function TriageFlow({
   livePosition,
+  droppedPosition,
   onClose,
   onSave,
 }: {
   livePosition: Position | null;
+  droppedPosition: Position | null;
   onClose: () => void;
   onSave: (record: CaseRecord) => void;
 }) {
@@ -898,7 +967,9 @@ function TriageFlow({
   const [path, setPath] = useState<Path | null>(null);
   const [snakeIdentity, setSnakeIdentity] = useState<SnakeIdentity | null>(null);
   const [place, setPlace] = useState("");
-  const [useLocation, setUseLocation] = useState(Boolean(livePosition));
+  const [locationChoice, setLocationChoice] = useState<
+    "gps" | "pin" | "description"
+  >(droppedPosition ? "pin" : livePosition ? "gps" : "description");
   const [savedCase, setSavedCase] = useState<CaseRecord | null>(null);
   const [copyMessage, setCopyMessage] = useState("");
   const [showAlertText, setShowAlertText] = useState(false);
@@ -920,6 +991,12 @@ function TriageFlow({
 
   function saveReport() {
     if (!animal || !path) return;
+    const selectedPosition =
+      locationChoice === "pin"
+        ? droppedPosition
+        : locationChoice === "gps"
+          ? livePosition
+          : null;
     const id = `WRM-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
     const record: CaseRecord = {
       id,
@@ -931,10 +1008,11 @@ function TriageFlow({
           ? `${snakeIdentity.name} · ${path.label}`
           : path.label,
       createdAt: new Date().toISOString(),
-      latitude: useLocation ? livePosition?.latitude : undefined,
-      longitude: useLocation ? livePosition?.longitude : undefined,
+      latitude: selectedPosition?.latitude,
+      longitude: selectedPosition?.longitude,
       place: place.trim(),
       status: path.urgency === "watch" ? "Sighting logged" : "Awaiting responder",
+      locationSource: selectedPosition ? locationChoice : "description",
     };
     onSave(record);
     setSavedCase(record);
@@ -1142,7 +1220,12 @@ Case: ${savedCase.id}
                 <h2>Where exactly is the animal?</h2>
                 {livePosition ? (
                   <label className="gps-choice">
-                    <input type="checkbox" checked={useLocation} onChange={(event) => setUseLocation(event.target.checked)} />
+                    <input
+                      type="radio"
+                      name="location-choice"
+                      checked={locationChoice === "gps"}
+                      onChange={() => setLocationChoice("gps")}
+                    />
                     <span className="gps-icon"><Crosshair size={20} /></span>
                     <span>
                       <strong>Use my current GPS</strong>
@@ -1153,8 +1236,27 @@ Case: ${savedCase.id}
                   <div className="safety-note"><LocateFixed size={19} /><span>Turn on “My location” from the map for an exact GPS point.</span></div>
                 )}
 
+                {droppedPosition && (
+                  <label className="gps-choice pin-choice">
+                    <input
+                      type="radio"
+                      name="location-choice"
+                      checked={locationChoice === "pin"}
+                      onChange={() => setLocationChoice("pin")}
+                    />
+                    <span className="gps-icon"><MapPin size={20} /></span>
+                    <span>
+                      <strong>Use the pin I dropped</strong>
+                      <small>
+                        {droppedPosition.latitude.toFixed(5)},{" "}
+                        {droppedPosition.longitude.toFixed(5)}
+                      </small>
+                    </span>
+                  </label>
+                )}
+
                 <label className="text-field">
-                  <span>Landmark or place</span>
+                  <span>Landmark or place {locationChoice !== "description" ? "(helpful)" : ""}</span>
                   <textarea
                     value={place}
                     onChange={(event) => setPlace(event.target.value)}
@@ -1171,7 +1273,11 @@ Case: ${savedCase.id}
                   <div><i /> Is traffic, water, wire or a pet involved?</div>
                 </div>
 
-                <button className="save-button" onClick={saveReport} disabled={!useLocation && !place.trim()}>
+                <button
+                  className="save-button"
+                  onClick={saveReport}
+                  disabled={locationChoice === "description" && !place.trim()}
+                >
                   Save case on this phone
                 </button>
               </motion.div>
@@ -1190,6 +1296,10 @@ Case: ${savedCase.id}
                   <Clipboard size={20} />
                   Copy responder alert
                 </button>
+                <a className="sms-button" href={smsHref(savedCase)}>
+                  <Send size={20} />
+                  Text Wildlife Rescue
+                </a>
                 {copyMessage && <p className="copy-feedback">{copyMessage}</p>}
                 {showAlertText && (
                   <label className="copy-fallback">
@@ -1219,6 +1329,7 @@ Case: ${savedCase.id}
 export default function Home() {
   const [locationEnabled, setLocationEnabled] = useState(false);
   const [livePosition, setLivePosition] = useState<Position | null>(null);
+  const [droppedPosition, setDroppedPosition] = useState<Position | null>(null);
   const [locationMessage, setLocationMessage] = useState("");
   const [triageOpen, setTriageOpen] = useState(false);
   const [cases, setCases] = useState<CaseRecord[]>([]);
@@ -1241,6 +1352,9 @@ export default function Home() {
     );
     if ("serviceWorker" in navigator && !isLocalPreview) {
       navigator.serviceWorker.register("/sw.js").catch(() => undefined);
+    }
+    if (window.location.hash === "#cases") {
+      setActiveTab("cases");
     }
   }, []);
 
@@ -1285,6 +1399,14 @@ export default function Home() {
       localStorage.setItem("wrm-cases", JSON.stringify(next));
       return next;
     });
+    if (record.locationSource === "pin") {
+      setDroppedPosition(null);
+    }
+  }
+
+  function dropIncidentPin(position: Position) {
+    setDroppedPosition(position);
+    setTriageOpen(true);
   }
 
   async function copyCaseAlert(record: CaseRecord) {
@@ -1328,6 +1450,63 @@ export default function Home() {
     window.setTimeout(() => setCaseMessage(""), 3200);
   }
 
+  function exportFieldArchive() {
+    const date = new Date().toISOString().slice(0, 10);
+    const archive = {
+      format: "wrm-field-archive",
+      version: 1,
+      exportedAt: new Date().toISOString(),
+      cases,
+    };
+    downloadFile(
+      `wrm-field-archive-${date}.json`,
+      JSON.stringify(archive, null, 2),
+      "application/json",
+    );
+    setCaseMessage(`${cases.length} cases backed up`);
+  }
+
+  function exportCasesCsv() {
+    const date = new Date().toISOString().slice(0, 10);
+    downloadFile(
+      `wrm-cases-${date}.csv`,
+      casesToCsv(cases),
+      "text/csv;charset=utf-8",
+    );
+    setCaseMessage(`${cases.length} cases exported for reporting`);
+  }
+
+  async function importFieldArchive(file: File | undefined) {
+    if (!file) return;
+    try {
+      const parsed = JSON.parse(await file.text());
+      if (
+        parsed?.format !== "wrm-field-archive" ||
+        !Array.isArray(parsed?.cases)
+      ) {
+        throw new Error("Not a WRM archive");
+      }
+      const imported = parsed.cases.filter(
+        (record: CaseRecord) =>
+          typeof record?.id === "string" &&
+          typeof record?.animal === "string" &&
+          typeof record?.createdAt === "string",
+      ) as CaseRecord[];
+      setCases((current) => {
+        const merged = new Map(current.map((record) => [record.id, record]));
+        imported.forEach((record) => merged.set(record.id, record));
+        const next = [...merged.values()].sort((left, right) =>
+          right.createdAt.localeCompare(left.createdAt),
+        );
+        localStorage.setItem("wrm-cases", JSON.stringify(next));
+        return next;
+      });
+      setCaseMessage(`${imported.length} archived cases merged onto this device`);
+    } catch {
+      setCaseMessage("That file is not a valid WRM Field Archive");
+    }
+  }
+
   const recentCases = useMemo(() => cases.slice(0, 8), [cases]);
 
   return (
@@ -1355,6 +1534,8 @@ export default function Home() {
               locationEnabled={locationEnabled}
               locationMessage={locationMessage}
               onToggleLocation={toggleLocation}
+              droppedPosition={droppedPosition}
+              onDropPosition={dropIncidentPin}
               cases={cases}
               />
 
@@ -1388,6 +1569,42 @@ export default function Home() {
             <span className="eyebrow">Stored only on this phone</span>
             <h1>Cases & sightings</h1>
             <p className="lead">Local records remain available without reception.</p>
+            <details className="app-guide">
+              <summary>
+                <Info size={18} />
+                How offline storage and sharing work
+              </summary>
+              <div>
+                <h2>Private by design</h2>
+                <p>
+                  The app shell and offline map are kept in the browser cache.
+                  Cases are stored separately in this browser on this device.
+                  There is no WRM database, account or automatic upload.
+                </p>
+                <p className="guide-warning">
+                  Clearing this website’s browser data, deleting the app, or
+                  losing the phone may delete its local cases. Export a Field
+                  Archive regularly.
+                </p>
+                <h2>Share one case</h2>
+                <p>
+                  Tap SMS to send the WRM alert. The receiver opens the Cases
+                  page, pastes the complete text into the alert field, and
+                  imports it onto their device.
+                </p>
+                <h2>Keep the organisation’s history</h2>
+                <p>
+                  Nominate one WRM-owned phone or laptop as the archive keeper.
+                  Import alerts sent by volunteers, then download a dated Field
+                  Archive after each shift or rescue period. Keep copies in two
+                  organisation-controlled locations.
+                </p>
+                <p>
+                  The CSV export opens in Excel or other spreadsheet tools for
+                  reporting, grants, outcome summaries, maps and visualisations.
+                </p>
+              </div>
+            </details>
             <section className="sms-import-panel" aria-label="Import a WRM alert">
               <label className="text-field">
                 <span>Paste a WRM alert text</span>
@@ -1403,6 +1620,35 @@ export default function Home() {
                 Import case to this phone
               </button>
               {caseMessage && <p className="case-message">{caseMessage}</p>}
+            </section>
+            <section className="field-archive-panel" aria-label="WRM Field Archive">
+              <div>
+                <span className="eyebrow">Long-term records</span>
+                <h2>WRM Field Archive</h2>
+                <p>Back up every case on this device or prepare the data for reports.</p>
+              </div>
+              <div className="archive-actions">
+                <button onClick={exportFieldArchive} disabled={!cases.length}>
+                  <Download size={17} />
+                  Backup archive
+                </button>
+                <button onClick={exportCasesCsv} disabled={!cases.length}>
+                  <Download size={17} />
+                  Reporting CSV
+                </button>
+                <label>
+                  <Upload size={17} />
+                  Merge archive
+                  <input
+                    type="file"
+                    accept="application/json,.json"
+                    onChange={(event) => {
+                      void importFieldArchive(event.target.files?.[0]);
+                      event.target.value = "";
+                    }}
+                  />
+                </label>
+              </div>
             </section>
             {recentCases.length ? (
               <div className="case-list">
@@ -1423,7 +1669,7 @@ export default function Home() {
                           <Clipboard size={15} />
                           Copy
                         </button>
-                        <a href={`sms:?&body=${encodeURIComponent(formatCaseAlert(item))}`}>
+                        <a href={smsHref(item)}>
                           <Send size={15} />
                           SMS
                         </a>
@@ -1470,6 +1716,7 @@ export default function Home() {
         {triageOpen && (
           <TriageFlow
             livePosition={livePosition}
+            droppedPosition={droppedPosition}
             onClose={() => setTriageOpen(false)}
             onSave={saveCase}
           />

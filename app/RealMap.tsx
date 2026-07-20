@@ -4,8 +4,10 @@ import { layers, namedFlavor } from "@protomaps/basemaps";
 import {
   Eye,
   EyeOff,
+  Info,
   Layers3,
   LocateFixed,
+  MapPin,
   Navigation,
   PawPrint,
   Route,
@@ -179,20 +181,27 @@ export function RealMap({
   locationEnabled,
   locationMessage,
   onToggleLocation,
+  droppedPosition,
+  onDropPosition,
   cases,
 }: {
   livePosition: Position | null;
   locationEnabled: boolean;
   locationMessage: string;
   onToggleLocation: () => void;
+  droppedPosition: Position | null;
+  onDropPosition: (position: Position) => void;
   cases: CaseRecord[];
 }) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
   const protocolRef = useRef<Protocol | null>(null);
   const liveMarkerRef = useRef<Marker | null>(null);
+  const droppedMarkerRef = useRef<Marker | null>(null);
   const caseMarkersRef = useRef<Marker[]>([]);
   const centredOnReporterRef = useRef(false);
+  const droppingPinRef = useRef(false);
+  const onDropPositionRef = useRef(onDropPosition);
   const [mapReady, setMapReady] = useState(false);
   const [aerialReady, setAerialReady] = useState(false);
   const [mapError, setMapError] = useState("");
@@ -200,6 +209,13 @@ export function RealMap({
   const [showRoads, setShowRoads] = useState(true);
   const [showLabels, setShowLabels] = useState(true);
   const [showCases, setShowCases] = useState(true);
+  const [droppingPin, setDroppingPin] = useState(false);
+  const [attributionOpen, setAttributionOpen] = useState(false);
+
+  useEffect(() => {
+    droppingPinRef.current = droppingPin;
+    onDropPositionRef.current = onDropPosition;
+  }, [droppingPin, onDropPosition]);
 
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
@@ -221,11 +237,6 @@ export function RealMap({
       pitchWithRotate: false,
       touchPitch: false,
     });
-
-    map.addControl(
-      new maplibregl.AttributionControl({ compact: true }),
-      "bottom-left",
-    );
 
     map.fitBounds(INITIAL_VIEW_BOUNDS, {
       padding: { top: 8, right: 10, bottom: 8, left: 10 },
@@ -263,6 +274,17 @@ export function RealMap({
       setMapReady(true);
     });
 
+    map.on("click", (event) => {
+      if (!droppingPinRef.current) return;
+      if (!isOnMinjerribah(event.lngLat.lat, event.lngLat.lng)) return;
+      onDropPositionRef.current({
+        latitude: event.lngLat.lat,
+        longitude: event.lngLat.lng,
+        accuracy: 0,
+      });
+      setDroppingPin(false);
+    });
+
     map.on("sourcedata", (event) => {
       if (
         event.sourceId === "qld-imagery" &&
@@ -292,12 +314,40 @@ export function RealMap({
       caseMarkersRef.current = [];
       liveMarkerRef.current?.remove();
       liveMarkerRef.current = null;
+      droppedMarkerRef.current?.remove();
+      droppedMarkerRef.current = null;
       map.remove();
       mapRef.current = null;
       maplibregl.removeProtocol("pmtiles");
       protocolRef.current = null;
     };
   }, []);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !mapReady) return;
+    map.getCanvas().style.cursor = droppingPin ? "crosshair" : "";
+  }, [droppingPin, mapReady]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !mapReady) return;
+
+    droppedMarkerRef.current?.remove();
+    droppedMarkerRef.current = null;
+    if (!droppedPosition) return;
+
+    const element = document.createElement("div");
+    element.className = "dropped-location-marker";
+    element.setAttribute("aria-label", "Pending wildlife incident location");
+    element.innerHTML = '<span aria-hidden="true">●</span>';
+    droppedMarkerRef.current = new maplibregl.Marker({
+      element,
+      anchor: "bottom",
+    })
+      .setLngLat([droppedPosition.longitude, droppedPosition.latitude])
+      .addTo(map);
+  }, [droppedPosition, mapReady]);
 
   useEffect(() => {
     const map = mapRef.current;
@@ -482,6 +532,23 @@ export function RealMap({
           <i aria-hidden="true" />
         </button>
 
+        <button
+          type="button"
+          className={`drop-pin-button ${droppingPin ? "is-on" : ""}`}
+          onClick={() => setDroppingPin((current) => !current)}
+          aria-pressed={droppingPin}
+          title={droppedPosition ? "Move incident pin" : "Drop incident pin"}
+        >
+          <MapPin size={17} />
+          <span>
+            {droppingPin
+              ? "Tap map"
+              : droppedPosition
+                ? "Move pin"
+                : "Drop pin"}
+          </span>
+        </button>
+
         {(outsideIsland || locationMessage) && (
           <div className="map-toast">
             {outsideIsland
@@ -493,6 +560,24 @@ export function RealMap({
           <div className="map-error">
             <Navigation size={16} />
             {mapError}
+          </div>
+        )}
+        <button
+          type="button"
+          className="map-attribution-button"
+          onClick={() => setAttributionOpen((open) => !open)}
+          aria-expanded={attributionOpen}
+          aria-controls="map-attribution"
+          aria-label="Map imagery information"
+        >
+          <Info size={20} />
+        </button>
+        {attributionOpen && (
+          <div className="map-attribution-panel" id="map-attribution">
+            Imagery © State of Queensland; © Planet Labs Netherlands B.V.,
+            Planet and Geoplex |{" "}
+            <a href="https://github.com/protomaps/basemaps">Protomaps</a> ©{" "}
+            <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>
           </div>
         )}
       </div>
