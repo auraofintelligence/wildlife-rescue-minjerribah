@@ -69,6 +69,10 @@ test("keeps offline, GPS, real-map and safety features in the product source", a
   assert.match(page, /Text Wildlife Rescue/);
   assert.match(page, /locationSource\?: "gps" \| "pin" \| "description"/);
   assert.match(page, /Use the pin I dropped/);
+  assert.match(page, /getCurrentPosition/);
+  assert.match(page, /Tag my position/);
+  assert.match(page, /one-time tag/);
+  assert.match(page, /without turning on live map tracking/);
   assert.match(page, /WRM Field Archive/);
   assert.match(page, /wrm-field-archive/);
   assert.match(page, /function casesToCsv/);
@@ -113,7 +117,7 @@ test("keeps offline, GPS, real-map and safety features in the product source", a
   assert.match(realMap, /\[153\.34,\s*-27\.55\]/);
   assert.match(realMap, /\[153\.57,\s*-27\.37\]/);
   assert.match(realMap, /fitBounds\(INITIAL_VIEW_BOUNDS/);
-  assert.match(serviceWorker, /wrm-shell-v11/);
+  assert.match(serviceWorker, /wrm-shell-v12/);
   assert.match(realMap, /minZoom:\s*INITIAL_ZOOM/);
   assert.match(realMap, /zoom:\s*Math\.max\(map\.getZoom\(\),\s*14\)/);
   assert.match(realMap, /isOnMinjerribah/);

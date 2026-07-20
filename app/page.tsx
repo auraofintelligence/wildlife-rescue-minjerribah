@@ -970,6 +970,9 @@ function TriageFlow({
   const [locationChoice, setLocationChoice] = useState<
     "gps" | "pin" | "description"
   >(droppedPosition ? "pin" : livePosition ? "gps" : "description");
+  const [taggedPosition, setTaggedPosition] = useState<Position | null>(null);
+  const [taggingPosition, setTaggingPosition] = useState(false);
+  const [tagPositionMessage, setTagPositionMessage] = useState("");
   const [savedCase, setSavedCase] = useState<CaseRecord | null>(null);
   const [copyMessage, setCopyMessage] = useState("");
   const [showAlertText, setShowAlertText] = useState(false);
@@ -995,7 +998,7 @@ function TriageFlow({
       locationChoice === "pin"
         ? droppedPosition
         : locationChoice === "gps"
-          ? livePosition
+          ? taggedPosition ?? livePosition
           : null;
     const id = `WRM-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
     const record: CaseRecord = {
@@ -1019,6 +1022,37 @@ function TriageFlow({
     setCopyMessage("");
     setShowAlertText(false);
     setStep("saved");
+  }
+
+  function tagCurrentPosition() {
+    if (!navigator.geolocation) {
+      setTagPositionMessage("This device cannot provide a GPS position.");
+      return;
+    }
+    setTaggingPosition(true);
+    setTagPositionMessage("Finding one GPS position…");
+    navigator.geolocation.getCurrentPosition(
+      (result) => {
+        const position = {
+          latitude: result.coords.latitude,
+          longitude: result.coords.longitude,
+          accuracy: result.coords.accuracy,
+        };
+        setTaggedPosition(position);
+        setLocationChoice("gps");
+        setTaggingPosition(false);
+        setTagPositionMessage(
+          `Position tagged · about ${Math.round(position.accuracy)} m accuracy`,
+        );
+      },
+      () => {
+        setTaggingPosition(false);
+        setTagPositionMessage(
+          "GPS was not available. Add a landmark or go back and drop a map pin.",
+        );
+      },
+      { enableHighAccuracy: true, maximumAge: 0, timeout: 15000 },
+    );
   }
 
   async function copyAlert() {
@@ -1218,7 +1252,7 @@ Case: ${savedCase.id}
               <motion.div key="report" className="flow-page" initial={{ opacity: 0, x: 18 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -18 }}>
                 <span className="eyebrow">Help responders find it quickly</span>
                 <h2>Where exactly is the animal?</h2>
-                {livePosition ? (
+                {livePosition || taggedPosition ? (
                   <label className="gps-choice">
                     <input
                       type="radio"
@@ -1229,11 +1263,29 @@ Case: ${savedCase.id}
                     <span className="gps-icon"><Crosshair size={20} /></span>
                     <span>
                       <strong>Use my current GPS</strong>
-                      <small>Accurate to about {Math.round(livePosition.accuracy)} metres</small>
+                      <small>
+                        Accurate to about{" "}
+                        {Math.round((taggedPosition ?? livePosition)!.accuracy)} metres
+                        {taggedPosition ? " · one-time tag" : ""}
+                      </small>
                     </span>
                   </label>
                 ) : (
-                  <div className="safety-note"><LocateFixed size={19} /><span>Turn on “My location” from the map for an exact GPS point.</span></div>
+                  <div className="tag-position-card">
+                    <LocateFixed size={21} />
+                    <span>
+                      <strong>At the animal now?</strong>
+                      <small>Save one GPS position without turning on live map tracking.</small>
+                    </span>
+                    <button
+                      type="button"
+                      onClick={tagCurrentPosition}
+                      disabled={taggingPosition}
+                    >
+                      {taggingPosition ? "Finding…" : "Tag my position"}
+                    </button>
+                    {tagPositionMessage && <p>{tagPositionMessage}</p>}
+                  </div>
                 )}
 
                 {droppedPosition && (

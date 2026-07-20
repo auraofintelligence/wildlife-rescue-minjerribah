@@ -1191,6 +1191,55 @@ h2 {
   color: #8c5d51;
 }
 
+.tag-position-card {
+  margin: 20px 0 14px;
+  padding: 13px;
+  border: 1px solid rgba(35, 110, 232, .2);
+  border-radius: 17px;
+  background: #edf4ff;
+  display: grid;
+  grid-template-columns: 34px 1fr;
+  align-items: center;
+  gap: 4px 9px;
+  color: #234e8f;
+}
+
+.tag-position-card > span {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.tag-position-card small {
+  color: #54709a;
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.tag-position-card button {
+  grid-column: 1 / -1;
+  min-height: 44px;
+  margin-top: 7px;
+  border: 0;
+  border-radius: 13px;
+  background: #236ee8;
+  color: white;
+  font-weight: 900;
+}
+
+.tag-position-card button:disabled {
+  opacity: .6;
+}
+
+.tag-position-card p {
+  grid-column: 1 / -1;
+  margin: 7px 1px 0;
+  color: #405f8b;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
 .text-field {
   display: flex;
   flex-direction: column;
