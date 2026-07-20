@@ -75,6 +75,7 @@ export type CaseRecord = {
 
 const CONTACT_NUMBER = "0448466556";
 const MARINE_NUMBER = "1300130372";
+const FACEBOOK_URL = "https://www.facebook.com/wildliferescueminjerribah";
 const PUBLIC_APP_URL =
   "https://wildlife-rescue-minjerribah.auraofintelligence.workers.dev";
 
@@ -1117,6 +1118,11 @@ Case: ${savedCase.id}
     await navigator.clipboard?.writeText(text);
   }
 
+  function openSavedCaseOnFacebook() {
+    window.open(FACEBOOK_URL, "_blank", "noopener,noreferrer");
+    void copyAlert();
+  }
+
   function goBack() {
     if (step === "question") setStep("animal");
     if (step === "question" && animal?.id === "snake") setStep("snake-identify");
@@ -1373,10 +1379,19 @@ Case: ${savedCase.id}
                   <Clipboard size={20} />
                   Copy responder alert
                 </button>
-                <a className="sms-button" href={smsHref(savedCase)}>
-                  <Send size={20} />
-                  Text Wildlife Rescue
-                </a>
+                <div className="handoff-buttons">
+                  <a className="sms-button" href={smsHref(savedCase)}>
+                    <Send size={20} />
+                    Text
+                  </a>
+                  <button
+                    className="facebook-button"
+                    onClick={openSavedCaseOnFacebook}
+                  >
+                    <span className="facebook-mark">f</span>
+                    Facebook
+                  </button>
+                </div>
                 {copyMessage && <p className="copy-feedback">{copyMessage}</p>}
                 {showAlertText && (
                   <label className="copy-fallback">
@@ -1493,6 +1508,27 @@ export default function Home() {
     await navigator.clipboard?.writeText(formatCaseAlert(record));
     setCaseMessage(`${record.id} alert copied`);
     window.setTimeout(() => setCaseMessage(""), 2600);
+  }
+
+  async function openCaseOnFacebook(record: CaseRecord) {
+    window.open(FACEBOOK_URL, "_blank", "noopener,noreferrer");
+    const alertText = formatCaseAlert(record);
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(alertText);
+      } else {
+        copyTextWithFallback(alertText);
+      }
+      setCaseMessage(
+        `${record.id} copied — paste it into a private Facebook message`,
+      );
+    } catch {
+      copyTextWithFallback(alertText);
+      setCaseMessage(
+        `Facebook opened — copy ${record.id}, then paste it into a private message`,
+      );
+    }
+    window.setTimeout(() => setCaseMessage(""), 4200);
   }
 
   function importCaseAlert() {
@@ -1619,7 +1655,11 @@ export default function Home() {
     <main className="app-shell">
       <header className="topbar">
         <div className="brand">
-          <span className="brand-mark">W</span>
+          <img
+            className="brand-mark"
+            src="/images/wrm-logo.jpg"
+            alt="Wildlife Rescue Minjerribah logo"
+          />
           <div>
             <strong>Wildlife Rescue</strong>
             <span>MINJERRIBAH</span>
@@ -1667,6 +1707,19 @@ export default function Home() {
                   Open cases
                 </button>
               </div>
+              <a
+                className="facebook-channel"
+                href={FACEBOOK_URL}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <span className="facebook-mark">f</span>
+                <span>
+                  <strong>Wildlife Rescue on Facebook</strong>
+                  <small>News, information and community updates</small>
+                </span>
+                <ChevronRight size={18} />
+              </a>
               </section>
             </div>
           </motion.div>
@@ -1786,6 +1839,10 @@ export default function Home() {
                           <Send size={15} />
                           SMS
                         </a>
+                        <button onClick={() => void openCaseOnFacebook(item)}>
+                          <span className="mini-facebook-mark">f</span>
+                          Facebook
+                        </button>
                         <button
                           className={deletePendingId === item.id ? "danger" : ""}
                           onClick={() => deleteLocalCase(item)}

@@ -37,13 +37,14 @@ test("server renders the Wildlife Rescue app shell", async () => {
 });
 
 test("keeps offline, GPS, real-map and safety features in the product source", async () => {
-  const [page, realMap, styles, serviceWorker, manifest, mapArchive, triageReview] = await Promise.all([
+  const [page, realMap, styles, serviceWorker, manifest, mapArchive, wrmLogo, triageReview] = await Promise.all([
     readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/RealMap.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
     readFile(new URL("../public/sw.js", import.meta.url), "utf8"),
     readFile(new URL("../public/manifest.webmanifest", import.meta.url), "utf8"),
     readFile(new URL("../public/maps/minjerribah.pmtiles", import.meta.url)),
+    readFile(new URL("../public/images/wrm-logo.jpg", import.meta.url)),
     readFile(new URL("../MINJERRIBAH-TRIAGE-REVIEW.txt", import.meta.url), "utf8"),
   ]);
 
@@ -66,7 +67,7 @@ test("keeps offline, GPS, real-map and safety features in the product source", a
   assert.match(page, /sms:\$\{CONTACT_NUMBER\}/);
   assert.match(page, /Open WRM Cases:/);
   assert.match(page, /Copy this whole text into the "Paste a WRM alert text" field/);
-  assert.match(page, /Text Wildlife Rescue/);
+  assert.match(page, /className="sms-button"/);
   assert.match(page, /locationSource\?: "gps" \| "pin" \| "description"/);
   assert.match(page, /Use the pin I dropped/);
   assert.match(page, /Tag my position/);
@@ -95,6 +96,11 @@ test("keeps offline, GPS, real-map and safety features in the product source", a
   assert.match(page, /href="#field-archive"/);
   assert.match(page, /href="#cases-top"/);
   assert.doesNotMatch(page, /cases\.slice\(0,\s*8\)/);
+  assert.match(page, /https:\/\/www\.facebook\.com\/wildliferescueminjerribah/);
+  assert.match(page, /Wildlife Rescue on Facebook/);
+  assert.match(page, /openCaseOnFacebook/);
+  assert.match(page, /private Facebook message/);
+  assert.match(page, /\/images\/wrm-logo\.jpg/);
   assert.match(realMap, /Drop pin/);
   assert.match(realMap, /Tap map/);
   assert.match(realMap, /onDropPosition/);
@@ -132,7 +138,7 @@ test("keeps offline, GPS, real-map and safety features in the product source", a
   assert.match(realMap, /\[153\.34,\s*-27\.55\]/);
   assert.match(realMap, /\[153\.57,\s*-27\.37\]/);
   assert.match(realMap, /fitBounds\(INITIAL_VIEW_BOUNDS/);
-  assert.match(serviceWorker, /wrm-shell-v14/);
+  assert.match(serviceWorker, /wrm-shell-v15/);
   assert.match(realMap, /minZoom:\s*INITIAL_ZOOM/);
   assert.match(realMap, /zoom:\s*Math\.max\(map\.getZoom\(\),\s*14\)/);
   assert.match(realMap, /isOnMinjerribah/);
@@ -155,6 +161,7 @@ test("keeps offline, GPS, real-map and safety features in the product source", a
   assert.match(serviceWorker, /caches\.open/);
   assert.match(serviceWorker, /servePmtilesRange/);
   assert.ok(mapArchive.byteLength > 1_000_000);
+  assert.ok(wrmLogo.byteLength > 100_000);
   assert.match(manifest, /"display":\s*"standalone"/);
   assert.match(triageReview, /REGIONAL REVIEW COPY/);
   assert.match(triageReview, /\[WRM VERIFY\]/);

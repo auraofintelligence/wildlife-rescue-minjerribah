@@ -81,14 +81,12 @@ button {
 .brand-mark {
   width: 39px;
   height: 39px;
-  border-radius: 50% 45% 54% 42%;
+  border: 1px solid #e2ded2;
+  border-radius: 50%;
+  object-fit: cover;
   display: grid;
   place-items: center;
-  background: var(--forest);
-  color: white;
-  font-family: Georgia, serif;
-  font-size: 21px;
-  font-style: italic;
+  background: white;
 }
 
 .brand div {
@@ -685,6 +683,61 @@ h2 {
 
 .quick-actions button span {
   font-size: 18px;
+}
+
+.facebook-channel {
+  min-height: 52px;
+  margin-top: 10px;
+  padding: 8px 11px;
+  border: 1px solid rgba(24, 119, 242, .18);
+  border-radius: 15px;
+  background: #f0f5fb;
+  color: var(--ink);
+  display: grid;
+  grid-template-columns: 30px 1fr auto;
+  align-items: center;
+  gap: 9px;
+  text-decoration: none;
+}
+
+.facebook-channel > span:nth-child(2) {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.facebook-channel strong {
+  font-size: 12px;
+}
+
+.facebook-channel small {
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.facebook-mark,
+.mini-facebook-mark {
+  border-radius: 8px;
+  background: #1877f2;
+  color: white !important;
+  display: grid;
+  place-items: center;
+  font-family: Arial, sans-serif;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.facebook-mark {
+  width: 29px;
+  height: 29px;
+  font-size: 21px;
+}
+
+.mini-facebook-mark {
+  width: 16px;
+  height: 16px;
+  border-radius: 5px;
+  font-size: 12px !important;
 }
 
 .bottom-nav {
@@ -1341,6 +1394,31 @@ h2 {
   background: var(--forest);
   color: white;
   box-shadow: 0 11px 24px rgba(29, 72, 62, .19);
+}
+
+.handoff-buttons {
+  width: 100%;
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.handoff-buttons .sms-button {
+  margin-top: 0;
+}
+
+.facebook-button {
+  min-height: 55px;
+  border: 1px solid rgba(24, 119, 242, .28);
+  border-radius: 16px;
+  background: #f0f5fb;
+  color: #174d92;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  font-weight: 900;
 }
 
 .save-button:disabled {
