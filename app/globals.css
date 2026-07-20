@@ -263,16 +263,28 @@ button {
 .real-case-marker {
   width: 43px;
   height: 43px;
-  border: 5px solid var(--amber);
+  border: 3px solid rgba(255, 255, 255, .96);
   border-radius: 50% 50% 50% 10px;
   transform: rotate(-45deg);
   display: grid;
   place-items: center;
-  background: #fff9ea;
+  background: #e9e5da;
   box-shadow:
-    0 0 0 2px rgba(255, 255, 255, .92),
-    0 7px 18px rgba(12, 33, 29, .48);
+    0 0 0 1px rgba(20, 48, 42, .7),
+    0 7px 18px rgba(7, 24, 20, .62);
   cursor: pointer;
+}
+
+.real-case-marker::after {
+  content: "";
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 10px;
+  height: 10px;
+  border: 2px solid white;
+  border-radius: 50%;
+  background: var(--amber);
 }
 
 .real-case-marker > span {
@@ -281,17 +293,26 @@ button {
   filter: drop-shadow(0 1px 0 rgba(255, 255, 255, .9));
 }
 
+.real-case-marker[data-animal="koala"] > span {
+  transform: rotate(33deg);
+}
+
 .real-case-marker.urgency-emergency,
 .real-case-marker.urgency-now {
-  border-color: var(--coral);
+  border-color: rgba(255, 255, 255, .96);
 }
 
-.real-case-marker.urgency-soon {
-  border-color: var(--amber);
+.real-case-marker.urgency-emergency::after,
+.real-case-marker.urgency-now::after {
+  background: var(--coral);
 }
 
-.real-case-marker.urgency-watch {
-  border-color: #4f8b58;
+.real-case-marker.urgency-soon::after {
+  background: var(--amber);
+}
+
+.real-case-marker.urgency-watch::after {
+  background: #4f8b58;
 }
 
 .real-location-marker {

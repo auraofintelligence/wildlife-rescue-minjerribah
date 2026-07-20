@@ -1031,29 +1031,53 @@ function TriageFlow({
       return;
     }
     setTaggingPosition(true);
-    setTagPositionMessage("Finding one GPS position…");
-    navigator.geolocation.getCurrentPosition(
+    setTagPositionMessage("Finding GPS, then improving accuracy…");
+    let bestPosition: Position | null = null;
+    let watchId: number | undefined;
+    let timeoutId: number | undefined;
+
+    const finish = () => {
+      if (watchId !== undefined) navigator.geolocation.clearWatch(watchId);
+      if (timeoutId !== undefined) window.clearTimeout(timeoutId);
+      setTaggingPosition(false);
+      if (bestPosition) {
+        setTaggedPosition(bestPosition);
+        setLocationChoice("gps");
+        setTagPositionMessage(
+          `Best position tagged · about ${Math.round(bestPosition.accuracy)} m accuracy`,
+        );
+      } else {
+        setTagPositionMessage(
+          "GPS was not available. Add a landmark or go back and drop a map pin.",
+        );
+      }
+    };
+
+    watchId = navigator.geolocation.watchPosition(
       (result) => {
         const position = {
           latitude: result.coords.latitude,
           longitude: result.coords.longitude,
           accuracy: result.coords.accuracy,
         };
-        setTaggedPosition(position);
-        setLocationChoice("gps");
-        setTaggingPosition(false);
+        if (!bestPosition || position.accuracy < bestPosition.accuracy) {
+          bestPosition = position;
+          setTaggedPosition(position);
+          setLocationChoice("gps");
+        }
         setTagPositionMessage(
-          `Position tagged · about ${Math.round(position.accuracy)} m accuracy`,
+          position.accuracy <= 20
+            ? `Good GPS fix · about ${Math.round(position.accuracy)} m`
+            : `Improving accuracy… best about ${Math.round(bestPosition.accuracy)} m`,
         );
+        if (position.accuracy <= 20) finish();
       },
       () => {
-        setTaggingPosition(false);
-        setTagPositionMessage(
-          "GPS was not available. Add a landmark or go back and drop a map pin.",
-        );
+        finish();
       },
       { enableHighAccuracy: true, maximumAge: 0, timeout: 15000 },
     );
+    timeoutId = window.setTimeout(finish, 12000);
   }
 
   async function copyAlert() {

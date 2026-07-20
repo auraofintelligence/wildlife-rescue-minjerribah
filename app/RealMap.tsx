@@ -379,8 +379,17 @@ export function RealMap({
           "aria-label",
           `${record.animal}: ${record.situation}`,
         );
+        element.dataset.animal = record.animal.toLocaleLowerCase("en-AU");
         element.title = `${record.animal} · ${record.situation}`;
         element.hidden = !showCases;
+        element.addEventListener("click", (event) => {
+          event.stopPropagation();
+          map.easeTo({
+            center: [record.longitude!, record.latitude!],
+            zoom: Math.max(map.getZoom(), 14),
+            duration: 700,
+          });
+        });
         const icon = document.createElement("span");
         icon.textContent = record.icon;
         element.appendChild(icon);
