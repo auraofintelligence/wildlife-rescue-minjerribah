@@ -1882,9 +1882,10 @@ export default function Home() {
                         <button
                           className={deletePendingId === item.id ? "danger" : ""}
                           onClick={() => deleteLocalCase(item)}
+                          aria-label={`Delete ${item.id} from this phone`}
                         >
                           <Trash2 size={15} />
-                          {deletePendingId === item.id ? "Sure?" : "Delete"}
+                          {deletePendingId === item.id ? "Sure?" : "Del"}
                         </button>
                       </span>
                     </div>

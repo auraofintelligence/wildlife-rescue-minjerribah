@@ -1,4 +1,4 @@
-const CACHE_NAME = "wrm-shell-v16";
+const CACHE_NAME = "wrm-shell-v17";
 const SHELL = [
   "/",
   "/manifest.webmanifest",
