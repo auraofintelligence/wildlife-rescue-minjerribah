@@ -12,6 +12,7 @@ import {
   Map as MapIcon,
   MapPin,
   Phone,
+  Play,
   Plus,
   Radio,
   Search,
@@ -1431,6 +1432,7 @@ export default function Home() {
   const [deletePendingId, setDeletePendingId] = useState<string | null>(null);
   const [caseQuery, setCaseQuery] = useState("");
   const [animalFilter, setAnimalFilter] = useState("all");
+  const [rangerVideoPlaying, setRangerVideoPlaying] = useState(false);
   const [caseSort, setCaseSort] = useState<"newest" | "oldest" | "animal" | "case">("newest");
 
   useEffect(() => {
@@ -1720,6 +1722,40 @@ export default function Home() {
                 </span>
                 <ChevronRight size={18} />
               </a>
+              <section className="ranger-video-card" aria-label="Meet the wildlife rangers">
+                {rangerVideoPlaying ? (
+                  <video
+                    autoPlay
+                    controls
+                    playsInline
+                    preload="metadata"
+                    poster="/images/wildlife-rescue-rangers-poster.jpg"
+                  >
+                    <source
+                      src="/media/wildlife-rescue-rangers-10s.mp4"
+                      type="video/mp4"
+                    />
+                  </video>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setRangerVideoPlaying(true)}
+                    aria-label="Play the 10-second wildlife ranger animation"
+                  >
+                    <img
+                      src="/images/wildlife-rescue-rangers-poster.jpg"
+                      alt=""
+                    />
+                    <span className="ranger-video-play">
+                      <Play size={17} fill="currentColor" />
+                    </span>
+                    <span className="ranger-video-copy">
+                      <strong>Meet the wildlife rangers</strong>
+                      <small>10-second animation · tap to play</small>
+                    </span>
+                  </button>
+                )}
+              </section>
               </section>
             </div>
           </motion.div>
@@ -1841,7 +1877,7 @@ export default function Home() {
                         </a>
                         <button onClick={() => void openCaseOnFacebook(item)}>
                           <span className="mini-facebook-mark">f</span>
-                          Facebook
+                          FB
                         </button>
                         <button
                           className={deletePendingId === item.id ? "danger" : ""}

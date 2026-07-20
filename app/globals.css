@@ -740,6 +740,71 @@ h2 {
   font-size: 12px !important;
 }
 
+.ranger-video-card {
+  margin-top: 10px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  background: #ebe8df;
+}
+
+.ranger-video-card button {
+  width: 100%;
+  min-height: 62px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  display: grid;
+  grid-template-columns: 78px 34px 1fr;
+  align-items: center;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ranger-video-card img {
+  width: 78px;
+  height: 62px;
+  object-fit: cover;
+}
+
+.ranger-video-play {
+  width: 30px;
+  height: 30px;
+  margin-left: -15px;
+  border: 2px solid white;
+  border-radius: 50%;
+  background: var(--coral);
+  color: white;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 5px 12px rgba(30, 55, 48, .25);
+}
+
+.ranger-video-copy {
+  min-width: 0;
+  margin-left: -4px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.ranger-video-copy strong {
+  font-size: 12px;
+}
+
+.ranger-video-copy small {
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.ranger-video-card video {
+  width: 100%;
+  max-height: 270px;
+  display: block;
+  background: #172b26;
+}
+
 .bottom-nav {
   position: fixed;
   z-index: 45;
