@@ -14,6 +14,7 @@ import {
   Phone,
   Plus,
   Radio,
+  Search,
   Send,
   ShieldAlert,
   Sparkles,
@@ -315,10 +316,10 @@ const animals: Animal[] = [
         tags: ["mobile", "injured"],
       },
       {
-        label: "Dead or not moving",
+        label: "Recently dead or not moving",
         urgency: "now",
-        headline: "Call — a joey may still need help",
-        do: ["Mark the exact spot", "Stay safely clear of traffic", "Call trained rescuers"],
+        headline: "Report immediately — a joey may still be saved",
+        do: ["Treat a recently dead kangaroo as urgent", "Mark the exact spot", "Stay safely clear of traffic", "Call trained rescuers immediately"],
         avoid: ["Do not check the pouch", "Do not move the animal"],
         tags: ["possible pouch young"],
       },
@@ -356,10 +357,10 @@ const animals: Animal[] = [
         tags: ["mobile", "injured"],
       },
       {
-        label: "Dead or not moving",
+        label: "Recently dead or not moving",
         urgency: "now",
-        headline: "Call — a joey may still need help",
-        do: ["Mark the exact spot", "Stay clear of traffic", "Call trained rescuers"],
+        headline: "Report immediately — a joey may still be saved",
+        do: ["Treat a recently dead wallaby as urgent", "Mark the exact spot", "Stay clear of traffic", "Call trained rescuers immediately"],
         avoid: ["Do not check the pouch or move the animal"],
         tags: ["possible pouch young"],
       },
@@ -1389,6 +1390,9 @@ export default function Home() {
   const [importText, setImportText] = useState("");
   const [caseMessage, setCaseMessage] = useState("");
   const [deletePendingId, setDeletePendingId] = useState<string | null>(null);
+  const [caseQuery, setCaseQuery] = useState("");
+  const [animalFilter, setAnimalFilter] = useState("all");
+  const [caseSort, setCaseSort] = useState<"newest" | "oldest" | "animal" | "case">("newest");
 
   useEffect(() => {
     const saved = localStorage.getItem("wrm-cases");
@@ -1559,7 +1563,33 @@ export default function Home() {
     }
   }
 
-  const recentCases = useMemo(() => cases.slice(0, 8), [cases]);
+  const caseAnimals = useMemo(
+    () => [...new Set(cases.map((record) => record.animal))].sort(),
+    [cases],
+  );
+  const filteredCases = useMemo(() => {
+    const query = caseQuery.trim().toLocaleLowerCase("en-AU");
+    const filtered = cases.filter((record) => {
+      const matchesAnimal =
+        animalFilter === "all" || record.animal === animalFilter;
+      const haystack = [
+        record.id,
+        record.animal,
+        record.situation,
+        record.place,
+        record.status,
+      ]
+        .join(" ")
+        .toLocaleLowerCase("en-AU");
+      return matchesAnimal && (!query || haystack.includes(query));
+    });
+    return filtered.sort((left, right) => {
+      if (caseSort === "oldest") return left.createdAt.localeCompare(right.createdAt);
+      if (caseSort === "animal") return left.animal.localeCompare(right.animal);
+      if (caseSort === "case") return left.id.localeCompare(right.id);
+      return right.createdAt.localeCompare(left.createdAt);
+    });
+  }, [animalFilter, caseQuery, caseSort, cases]);
 
   return (
     <main className="app-shell">
@@ -1617,7 +1647,7 @@ export default function Home() {
             </div>
           </motion.div>
         ) : (
-          <motion.section className="cases-page" key="cases-tab" initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -16 }}>
+          <motion.section id="cases-top" className="cases-page" key="cases-tab" initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -16 }}>
             <span className="eyebrow">Stored only on this phone</span>
             <h1>Cases & sightings</h1>
             <p className="lead">Local records remain available without reception.</p>
@@ -1673,38 +1703,45 @@ export default function Home() {
               </button>
               {caseMessage && <p className="case-message">{caseMessage}</p>}
             </section>
-            <section className="field-archive-panel" aria-label="WRM Field Archive">
-              <div>
-                <span className="eyebrow">Long-term records</span>
-                <h2>WRM Field Archive</h2>
-                <p>Back up every case on this device or prepare the data for reports.</p>
-              </div>
-              <div className="archive-actions">
-                <button onClick={exportFieldArchive} disabled={!cases.length}>
-                  <Download size={17} />
-                  Backup archive
-                </button>
-                <button onClick={exportCasesCsv} disabled={!cases.length}>
-                  <Download size={17} />
-                  Reporting CSV
-                </button>
-                <label>
-                  <Upload size={17} />
-                  Merge archive
+            {cases.length > 0 && (
+              <div className="case-tools" aria-label="Find and sort cases">
+                <label className="case-search">
+                  <Search size={14} />
                   <input
-                    type="file"
-                    accept="application/json,.json"
-                    onChange={(event) => {
-                      void importFieldArchive(event.target.files?.[0]);
-                      event.target.value = "";
-                    }}
+                    value={caseQuery}
+                    onChange={(event) => setCaseQuery(event.target.value)}
+                    placeholder="Case / type / place"
+                    aria-label="Search cases"
                   />
                 </label>
+                <select
+                  value={animalFilter}
+                  onChange={(event) => setAnimalFilter(event.target.value)}
+                  aria-label="Filter by animal"
+                >
+                  <option value="all">All animals</option>
+                  {caseAnimals.map((animalName) => (
+                    <option key={animalName} value={animalName}>{animalName}</option>
+                  ))}
+                </select>
+                <select
+                  value={caseSort}
+                  onChange={(event) =>
+                    setCaseSort(event.target.value as typeof caseSort)
+                  }
+                  aria-label="Sort cases"
+                >
+                  <option value="newest">Newest</option>
+                  <option value="oldest">Oldest</option>
+                  <option value="animal">Animal A–Z</option>
+                  <option value="case">Case ID</option>
+                </select>
+                <a href="#field-archive">Export ↓</a>
               </div>
-            </section>
-            {recentCases.length ? (
+            )}
+            {filteredCases.length ? (
               <div className="case-list">
-                {recentCases.map((item) => (
+                {filteredCases.map((item) => (
                   <article className="case-row" key={item.id}>
                     <span className="case-animal">{item.icon}</span>
                     <div>
@@ -1738,6 +1775,19 @@ export default function Home() {
                   </article>
                 ))}
               </div>
+            ) : cases.length ? (
+              <div className="empty-state compact-empty">
+                <span>⌕</span>
+                <strong>No matching cases</strong>
+                <button
+                  onClick={() => {
+                    setCaseQuery("");
+                    setAnimalFilter("all");
+                  }}
+                >
+                  Clear filters
+                </button>
+              </div>
             ) : (
               <div className="empty-state">
                 <span>🐾</span>
@@ -1746,6 +1796,36 @@ export default function Home() {
                 <button onClick={() => setTriageOpen(true)}>Start a report</button>
               </div>
             )}
+            <section id="field-archive" className="field-archive-panel" aria-label="WRM Field Archive">
+              <div>
+                <span className="eyebrow">Long-term records</span>
+                <h2>WRM Field Archive</h2>
+                <p>Back up every case on this device or prepare the data for reports.</p>
+              </div>
+              <div className="archive-actions">
+                <button onClick={exportFieldArchive} disabled={!cases.length}>
+                  <Download size={17} />
+                  Backup archive
+                </button>
+                <button onClick={exportCasesCsv} disabled={!cases.length}>
+                  <Download size={17} />
+                  Reporting CSV
+                </button>
+                <label>
+                  <Upload size={17} />
+                  Merge archive
+                  <input
+                    type="file"
+                    accept="application/json,.json"
+                    onChange={(event) => {
+                      void importFieldArchive(event.target.files?.[0]);
+                      event.target.value = "";
+                    }}
+                  />
+                </label>
+              </div>
+              <a className="back-to-cases" href="#cases-top">↑ Top</a>
+            </section>
           </motion.section>
         )}
       </AnimatePresence>
