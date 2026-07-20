@@ -607,7 +607,10 @@ export function RealMap({
             <i className="legend-dot red" /> urgent
           </span>
           <span>
-            <i className="legend-dot amber" /> watch
+            <i className="legend-dot amber" /> soon
+          </span>
+          <span>
+            <i className="legend-dot green" /> watch
           </span>
         </div>
       </div>

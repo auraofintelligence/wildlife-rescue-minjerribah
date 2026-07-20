@@ -589,6 +589,7 @@ button {
 
 .legend-dot.red { background: var(--coral); }
 .legend-dot.amber { background: var(--amber); }
+.legend-dot.green { background: #4f8b58; }
 
 .help-panel {
   padding: 24px 20px 10px;
