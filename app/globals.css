@@ -1708,19 +1708,16 @@ h2 {
 
 .case-tools {
   margin: 0 0 10px;
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, .85fr) auto;
   align-items: center;
   gap: 6px;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-
-.case-tools::-webkit-scrollbar {
-  display: none;
 }
 
 .case-search {
-  flex: 0 0 132px;
+  grid-column: 1 / -1;
+  width: 100%;
+  min-width: 0;
   height: 36px;
   padding: 0 9px;
   border: 1px solid var(--line);
@@ -1744,7 +1741,8 @@ h2 {
 
 .case-tools select,
 .case-tools > a {
-  flex: 0 0 auto;
+  width: 100%;
+  min-width: 0;
   height: 36px;
   border: 1px solid var(--line);
   border-radius: 11px;
@@ -1758,6 +1756,7 @@ h2 {
 .case-tools > a {
   display: flex;
   align-items: center;
+  justify-content: center;
   text-decoration: none;
 }
 
